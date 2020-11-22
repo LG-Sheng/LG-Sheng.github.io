@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>算法-递推 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="概述　　递推法是一种应用非常广泛的常用算法之一，与递归有着非常密切的联系。 　　递推是利用问题本身所具有的递推关系求解问题的一种方法。递推算法的基本思想是把一个复杂的庞大的计算过程转化为简单过程的多次重复，该算法充分利用了计算机的运算速度快和不知疲倦的特点，从头开始一步步地推出问题最终的结果。使用递推算法编程，既可使程序简练，又可节省计算时间。 　　递推算法的首要问题是得到相邻的数据项之间的关系，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-递推">
+<meta property="og:url" content="https://yumiaomiao.top/2019/04/23/%E7%AE%97%E6%B3%95-%E9%80%92%E6%8E%A8/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="概述　　递推法是一种应用非常广泛的常用算法之一，与递归有着非常密切的联系。 　　递推是利用问题本身所具有的递推关系求解问题的一种方法。递推算法的基本思想是把一个复杂的庞大的计算过程转化为简单过程的多次重复，该算法充分利用了计算机的运算速度快和不知疲倦的特点，从头开始一步步地推出问题最终的结果。使用递推算法编程，既可使程序简练，又可节省计算时间。 　　递推算法的首要问题是得到相邻的数据项之间的关系，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/%E7%AE%97%E6%B3%95.jpg">
+<meta property="article:published_time" content="2019-04-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-05-01T04:01:22.568Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/%E7%AE%97%E6%B3%95.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="算法-递推" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/%E7%AE%97%E6%B3%95.jpg" alt="算法-递推">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-04-22T16:00:00.000Z">2019-04-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    18 分钟 读完 (大约 2695 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                算法-递推
+            
+        </h1>
+        <div class="content">
+            <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h2><p>　　递推法是一种应用非常广泛的常用算法之一，与递归有着非常密切的联系。</p>
+<p>　　递推是利用问题本身所具有的递推关系求解问题的一种方法。递推算法的基本思想是把一个复杂的庞大的计算过程转化为简单过程的多次重复，该算法充分利用了计算机的运算速度快和不知疲倦的特点，从头开始一步步地推出问题最终的结果。使用递推算法编程，既可使程序简练，又可节省计算时间。</p>
+<p>　　递推算法的首要问题是得到相邻的数据项之间的关系，即递推关系。它针对这样一类问题：问题的解决可以分为若干步骤，每个步骤都产生一个子解，每个子解都是由前面若干子解生成的。我们把这种由前面的子解得出后面的子解的规则称为递推关系。</p>
+<a id="more"></a>
+
+<h3 id="实施递推的步骤"><a href="#实施递推的步骤" class="headerlink" title="实施递推的步骤"></a><strong>实施递推的步骤</strong></h3><ol>
+<li><p><strong>确定递推定量</strong></p>
+<p>　　　　应用递推算法解决问题，要根据问题具体实际设置递推变量。递推变量可以是简单变量，也可以是一维或多维数组。</p>
+</li>
+<li><p><strong>建立递推关系</strong></p>
+<p>　　递推关系是指如何从变量的前一些值推出其下一个值或从变量的后一些值推出其上一个值的公式。</p>
+<p>   　　递推关系是递推的依据，是解决递推问题的关键。有些问题，其递推关系是明确的，大多数实际问题并没有现成的明确的递推关系，需根据问题的具体实际，不断尝试推理，才能确定问题的递推关系。</p>
+</li>
+<li><p><strong>确定初始条件</strong></p>
+<p>　　对所确定的递推变量，要根据问题最简单情形的数据确定递推变量的初始值，这是递推的基础。</p>
+</li>
+<li><p><strong>对递推过程进行控制</strong></p>
+<p>　　　　递推过程不能无休止地执行下去。递推过程在什么时候结束，满足什么条件结束，这是递推算法必须考虑的递推过程控制问题。</p>
+<p>   　　递推过程的控制通常可分为两种情形：一种是所需的递推次数是确定的值，可以计算出来；另一种是所需的递推次数无法确定。对于前一种情况，可以构建一个固定次数的循环来实现对递推过程的控制；对于后一种情况，需要进一步根据问题的具体实际归纳出用来结束递推过程的条件。</p>
+</li>
+</ol>
+<h3 id="递推算法框架描述"><a href="#递推算法框架描述" class="headerlink" title="递推算法框架描述"></a><strong>递推算法框架描述</strong></h3><ol>
+<li><p><strong>简单顺推算法</strong></p>
+<p>　　　　顺推即从前往后推，从已求得的规模为1,2,3，…，i-1的一系列解，推出问题规模为i的解，直至得到规模为n的解。框架描述:</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f(<span class="hljs-number">1</span>:i-<span class="hljs-number">1</span>)=&lt;初始值&gt;;</span><br><span class="line"><span class="hljs-keyword">for</span>(k=i;k&lt;=n;k++)</span><br><span class="line">    f(k)=&lt;递推关系式&gt;;</span><br><span class="line">System.out.println(f(n));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>简单逆推算法</strong></p>
+<p>　　　　逆推即从后往前推，从以求得的规模为n，n-1，…，i+1的一系列解，推出问题规模为i的解，直至得到规模为1的解。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">f(n:i+<span class="hljs-number">1</span>)=&lt;初始值&gt;;</span><br><span class="line"><span class="hljs-keyword">for</span>(k=i;k&gt;=<span class="hljs-number">1</span>;k--)</span><br><span class="line">    f(k)=&lt;递推关系式&gt;;</span><br><span class="line">System.out.println(f(<span class="hljs-number">1</span>));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>二维数组顺推算法</strong></p>
+<p>　　简单递推问题设置一维数组实现，较复杂的递推问题需设置二维或二维以上数组。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>:m)=&lt;初始值&gt;;</span><br><span class="line"><span class="hljs-keyword">for</span>(k=<span class="hljs-number">2</span>;k&lt;=m;k++)</span><br><span class="line">    <span class="hljs-keyword">for</span>(j=<span class="hljs-number">1</span>;j&lt;=m;j++)</span><br><span class="line">        f(k,j)=&lt;递推关系式&gt;;</span><br><span class="line">System.out.println(f(n,m));</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>多关系分级递推算法</strong></p>
+<p>　　当递推关系包含两个或两个以上关系式时，通常应用多关系分级递推算法求解。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">f(<span class="hljs-number">1</span>:i-<span class="hljs-number">1</span>)=&lt;初始值&gt;;</span><br><span class="line"><span class="hljs-keyword">for</span>(k=i;k&lt;=n;k++)&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(&lt;条件一&gt;)</span><br><span class="line">        f(k)=&lt;递推关系<span class="hljs-number">1</span>&gt;;</span><br><span class="line">    	.</span><br><span class="line">        .</span><br><span class="line">        .</span><br><span class="line">    <span class="hljs-keyword">if</span>(&lt;条件m&gt;)</span><br><span class="line">        f(k)=&lt;递推关系式m&gt;;</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(f(n));</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="相关例题"><a href="#相关例题" class="headerlink" title="相关例题"></a><strong>相关例题</strong></h2><h3 id="1-摆动数列"><a href="#1-摆动数列" class="headerlink" title="1.摆动数列"></a><strong>1.摆动数列</strong></h3><p>　　已知递推数列：a(1)=1,   a(2i)=a(i)+1,  a(2i+1)=a(i)+a(i+1),  i为正整数，试求该数列的第n项与前n项中哪些项最大？最大值为多少？</p>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a><strong>分析</strong></h4><p>递推式：</p>
+<ol>
+<li>当i为偶数时，  a(i)=a(i/2)+1</li>
+<li>当i为奇数时， a(i)=a((i+1)/2)+a((i-1)/2)</li>
+</ol>
+<p>每得一项与最大值max比较，如果a(i)&gt;max,则max=a(i).</p>
+<h4 id="代码"><a href="#代码" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 摆动数列<span class="hljs-title">_</span>递推 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> n,max=<span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ar[];</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">		n=in.nextInt();</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[n+<span class="hljs-number">1</span>];</span><br><span class="line">		ar[<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;</span><br><span class="line">		f(n);</span><br><span class="line">		System.out.println(<span class="hljs-string">&quot;最大项为：&quot;</span>+max);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">2</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span>(i%<span class="hljs-number">2</span>==<span class="hljs-number">0</span>)&#123;</span><br><span class="line">				ar[i]=ar[i/<span class="hljs-number">2</span>]+<span class="hljs-number">1</span>;</span><br><span class="line">				<span class="hljs-keyword">if</span>(ar[i]&gt;max) max=ar[i];</span><br><span class="line">			&#125; </span><br><span class="line">			<span class="hljs-keyword">if</span>(i%<span class="hljs-number">2</span>==<span class="hljs-number">1</span>)&#123;</span><br><span class="line">				ar[i]=ar[(i+<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>]+ar[(i-<span class="hljs-number">1</span>)/<span class="hljs-number">2</span>];</span><br><span class="line">				<span class="hljs-keyword">if</span>(ar[i]&gt;max) max=ar[i];</span><br><span class="line">			&#125; </span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-整数划分问题"><a href="#2-整数划分问题" class="headerlink" title="2.整数划分问题"></a><strong>2.整数划分问题</strong></h3><p>　　正整数s（简称为和数）的划分（又称分划）是把s分成为若干个正整数（简称为零数或部分）之和，划分式中允许零数重复，且不记零数的次序。如：</p>
+<p>k=2: 1+1 ;2</p>
+<p>k=3:1+1+1 ;1+2;3</p>
+<p>k=4:1+1+1+1 ;1+1+2;1+3;4</p>
+<h4 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a><strong>分析</strong></h4><p>　　和数k的划分式与和数k-1的划分式存在以下递推关系：</p>
+<ol>
+<li>在所有和数k-1的划分前加一个零数“1”都是和数k的划分式。</li>
+<li>和数k-1的划分式的前两个零数作比较，如果第一个零数x1小于第2个零数x2，则把第1个零数加一后成为和数k的划分式。</li>
+</ol>
+<p>设置一个三维数组ar[][][k] [j] [i] 表示和数k第j个划分式的第i个数，k从2开始，初始条件为：</p>
+<p>ar[2] [1] [1]=1,ar[2] [1] [2]=1,ar[2] [2] [1]=2</p>
+<h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 整数划分<span class="hljs-title">_</span>递推 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> n,x=<span class="hljs-number">2</span>,y;<span class="hljs-comment">//x为当前划分式的数量</span></span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ar[][][];</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">		n=in.nextInt();</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span> [n+<span class="hljs-number">1</span>][<span class="hljs-number">800</span>][n+<span class="hljs-number">2</span>];</span><br><span class="line">		ar[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>][<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<span class="hljs-comment">//初始条件</span></span><br><span class="line">		ar[<span class="hljs-number">2</span>][<span class="hljs-number">1</span>][<span class="hljs-number">2</span>]=<span class="hljs-number">1</span>;</span><br><span class="line">		ar[<span class="hljs-number">2</span>][<span class="hljs-number">2</span>][<span class="hljs-number">1</span>]=<span class="hljs-number">2</span>;</span><br><span class="line">		f(n);</span><br><span class="line">		printf();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>&#123;<span class="hljs-comment">//递推函数</span></span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">3</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">1</span>;j&lt;=x;j++)&#123;<span class="hljs-comment">//此for循环给每个划分式加一</span></span><br><span class="line">				ar[i][j][<span class="hljs-number">1</span>]=<span class="hljs-number">1</span>;<span class="hljs-comment">//划分式的一个数为一</span></span><br><span class="line">				<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> t=<span class="hljs-number">2</span>;t&lt;=i;t++)</span><br><span class="line">					ar[i][j][t]=ar[i-<span class="hljs-number">1</span>][j][t-<span class="hljs-number">1</span>];<span class="hljs-comment">//后面加上前一个和数的划分式</span></span><br><span class="line">			&#125;</span><br><span class="line">			y=x;</span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">1</span>;j&lt;=x;j++)&#123;</span><br><span class="line">				<span class="hljs-keyword">if</span>(ar[i-<span class="hljs-number">1</span>][j][<span class="hljs-number">1</span>]&lt;ar[i-<span class="hljs-number">1</span>][j][<span class="hljs-number">2</span>])&#123;<span class="hljs-comment">//判断前一个和数的每个划分式的第一个零数是否小于第二个</span></span><br><span class="line">					y++;<span class="hljs-comment">//划分式加一</span></span><br><span class="line">					ar[i][y][<span class="hljs-number">1</span>]=ar[i-<span class="hljs-number">1</span>][j][<span class="hljs-number">1</span>]+<span class="hljs-number">1</span>;<span class="hljs-comment">//和数i的第y个划分式第一个数等于和数i-1的第i个划分式的第一个数加一</span></span><br><span class="line">					<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> t=<span class="hljs-number">2</span>;t&lt;=i-<span class="hljs-number">1</span>;t++)</span><br><span class="line">						ar[i][y][t]=ar[i-<span class="hljs-number">1</span>][j][t];</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			y++;ar[i][y][<span class="hljs-number">1</span>]=i;<span class="hljs-comment">//和数i的最后一个划分式，（就是自己本身）</span></span><br><span class="line">			x=y;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">printf</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=x;i++)&#123;</span><br><span class="line">			System.out.print(ar[n][i][<span class="hljs-number">1</span>]);</span><br><span class="line">			<span class="hljs-keyword">int</span> j=<span class="hljs-number">2</span>;</span><br><span class="line">			<span class="hljs-keyword">while</span>(ar[n][i][j]&gt;<span class="hljs-number">0</span>)&#123;</span><br><span class="line">				System.out.print(<span class="hljs-string">&quot;+&quot;</span>+ar[n][i][j]);j++;</span><br><span class="line">			&#125;</span><br><span class="line">			System.out.println();</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-水手分椰子问题"><a href="#3-水手分椰子问题" class="headerlink" title="3.水手分椰子问题"></a><strong>3.水手分椰子问题</strong></h3><p>　　n名水手来到一个岛上，采了一堆后，因为疲劳都睡着了。一段时间后，第一个水手醒来，悄悄地将椰子等分成n份，多出m个椰子，便给了旁边的猴子，然后自己藏起一份，再将剩下的椰子重新合在一起，继续睡觉。不久，第二名水手醒来，同样将椰子等分成n份，恰好也多出m个，也给了猴子。然后自己也藏了一份，再将剩下的椰子重新合在一起。以后水手醒来，发现椰子少了许多，心照不宣，便把剩下的椰子分成n份，恰好又多出m个，给了猴子。</p>
+<p>　　问：原来这堆椰子至少有多少个？</p>
+<h4 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a><strong>分析</strong></h4><p>　　根据相邻两人所藏的椰子数相同，确定迭代方程：(n-1)×ar[i]=n×ar[i+1]+1</p>
+<p>　　ar[i]为前一个水手分的每一份的个数，ar[i+1]为后一个水手分的每一份的个数.因为前一位水手要给自己留一份，剩下的(n-1)份留个下一个水手分，此时前一个水手分完之后的椰子数和后一个水手还未开始分椰子的椰子数是相同的。</p>
+<p>　　如果式子:ar[i]=(n×ar[i+1]+1)×(n-1)经过n次迭代ar[i]都为整数，即找到一个解sum=n×ar[1]+m  (因为经过n次迭代ar[1]为第一位水手分的椰子数)</p>
+<h4 id="代码-2"><a href="#代码-2" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 水手分椰子 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> n,m;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">double</span> ar[];</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">double</span> sum,k;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">		n=in.nextInt();</span><br><span class="line">		m=in.nextInt();</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">double</span> [n+<span class="hljs-number">2</span>];</span><br><span class="line">		k=n;</span><br><span class="line">		f(n,m);</span><br><span class="line">		System.out.println(<span class="hljs-string">&quot;椰子至少有&quot;</span>+sum+<span class="hljs-string">&quot;个.&quot;</span>);</span><br><span class="line">		print();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n,<span class="hljs-keyword">int</span> m)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">int</span> i=n+<span class="hljs-number">1</span>;</span><br><span class="line">		ar[n+<span class="hljs-number">1</span>]=k;</span><br><span class="line">		<span class="hljs-keyword">while</span>(i&gt;<span class="hljs-number">1</span>)&#123;<span class="hljs-comment">//当i=1表示已经经过n次迭代</span></span><br><span class="line">			i--;</span><br><span class="line">			ar[i]=(n*ar[i+<span class="hljs-number">1</span>]+m)/(n-<span class="hljs-number">1</span>);</span><br><span class="line">			<span class="hljs-keyword">if</span>(ar[i]!=Math.floor(ar[i]))&#123;<span class="hljs-comment">//floor(double x)函数: 取不大于x的最大整数</span></span><br><span class="line">				k++;</span><br><span class="line">				ar[n+<span class="hljs-number">1</span>]=k;</span><br><span class="line">				i=n+<span class="hljs-number">1</span>;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">		sum=ar[<span class="hljs-number">1</span>]*n+m;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">print</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)&#123;</span><br><span class="line">			<span class="hljs-keyword">double</span> x=ar[i]*n+m;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;第&quot;</span>+i+<span class="hljs-string">&quot;个水手将&quot;</span>+x+<span class="hljs-string">&quot;个椰子分成&quot;</span>+n+<span class="hljs-string">&quot;份,自己藏了&quot;</span>+ar[i]+<span class="hljs-string">&quot;个椰子.&quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-排队买票问题"><a href="#4-排队买票问题" class="headerlink" title="4.排队买票问题"></a><strong>4.排队买票问题</strong></h3><p>　　一场电影开始前，售票工作正在紧张进行中。每张电影票为50元，现在有i个人排队等待购票，其中有m个人手持50元的钞票，另外n个人手持100元的钞票。假设开始售票时售票处没有零钱，求出这i个人排队购票，使售票处不至出现找不开钱的局面的不同排队种数（拿同样面值钞票的人对换位置为同一种排队）</p>
+<h3 id="分析-3"><a href="#分析-3" class="headerlink" title="分析"></a><strong>分析</strong></h3><p>　　第m+n个人排队购票，第m+n个人站在第m+n-1个人的后面，则第m+n个人的排队方式可由下列两种情况获得:</p>
+<ol>
+<li><p>第m+n个人手持100元钞票，则在他之前的m+n-1个人中有m个人手持50元的钞票，有n-1个人手持100元钞票，此时情况共有f(m,n-1)。</p>
+</li>
+<li><p>第m+n个人手持50元钞票，则在他之前的m+n-1个人中有m-1个人手持50元钞票，有n个人手持100元钞票，此时情况共有f(m-1,n)。</p>
+<p>所以，递推式为:f(m,n)=f(m,n-1)+f(m-1,n)</p>
+</li>
+</ol>
+<h4 id="代码-3"><a href="#代码-3" class="headerlink" title="代码"></a><strong>代码</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 排队购票<span class="hljs-title">_</span>递推 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">long</span> dp[][];</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> m,n;</span><br><span class="line">	<span class="hljs-keyword">static</span> Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		m=in.nextInt();</span><br><span class="line">		n=in.nextInt();</span><br><span class="line">		dp=<span class="hljs-keyword">new</span> <span class="hljs-keyword">long</span> [m+<span class="hljs-number">1</span>][n+<span class="hljs-number">1</span>];</span><br><span class="line">		dp();</span><br><span class="line">		System.out.println(dp[m][n]);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">dp</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=m;i++)</span><br><span class="line">			dp[i][<span class="hljs-number">0</span>]=<span class="hljs-number">1</span>;</span><br><span class="line">		</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;=n;i++)</span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=i;j&lt;=m;j++)&#123;</span><br><span class="line">				dp[j][i]=dp[j-<span class="hljs-number">1</span>][i]+dp[j][i-<span class="hljs-number">1</span>]; <span class="hljs-comment">//递推式</span></span><br><span class="line">			&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这种解法类似于动态规划。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p>　　递推的话，就写到这了吧。end!</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/05/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%BF%E6%80%A7%E8%A1%A8-%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">数据结构-线性表-顺序存储</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/04/17/%E7%AE%97%E6%B3%95-%E9%80%92%E5%BD%92/">
+                <span class="level-item">算法-递归</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="算法-递推" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

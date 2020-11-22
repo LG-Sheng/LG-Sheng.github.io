@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>基于Android端的http、rtsp协议视频流播放器的实现 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="前言　　最近实训根据老师的要求实现了一个Android端的http、rtsp播放器，根据地址连接并播放视频实时流，并附带人脸检测、目标检测等功能，在此重构一下实现过程并总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于Android端的http、rtsp协议视频流播放器的实现">
+<meta property="og:url" content="https://yumiaomiao.top/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="前言　　最近实训根据老师的要求实现了一个Android端的http、rtsp播放器，根据地址连接并播放视频实时流，并附带人脸检测、目标检测等功能，在此重构一下实现过程并总结。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/android.jpg">
+<meta property="article:published_time" content="2020-01-11T01:19:22.000Z">
+<meta property="article:modified_time" content="2020-01-11T09:11:04.298Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/android.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="基于Android端的http、rtsp协议视频流播放器的实现" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    16 分钟 读完 (大约 2331 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                基于Android端的http、rtsp协议视频流播放器的实现
+            
+        </h1>
+        <div class="content">
+            <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>　　最近实训根据老师的要求实现了一个Android端的http、rtsp播放器，根据地址连接并播放视频实时流，并附带人脸检测、目标检测等功能，在此重构一下实现过程并总结。</p>
+<a id="more"></a>
+
+<br>
+
+<h4 id="总体分析"><a href="#总体分析" class="headerlink" title="总体分析"></a><strong>总体分析</strong></h4><p>　　首先，需要实现从通过http、rtsp协议发送的视频流中获得视频帧，不然接下来的工作都没法继续。能获取视频帧后就能进行人脸检测或目标检测等工作。所以，获取视频帧至关重要。关于视频帧的获取最初的想法是通过OpenCV-Android来实现，使用VideoCapture直接通过地址打开视频流，然后通过while获取每一帧，但是怎么都打不开( isOpened()总是返回false ) 但是使用JAVA却能打开，通过网上查找资料得知VideoCapture打开媒体的后端是通过ffmpeg实现的。至于Android怎么使用VideoCapture打开视频流，，emmm我还是换个方法吧。根据老师的提示接触到了vlc，但是vlc并没有在java端提供返回视频帧的回调接口，要想使用的话就要修改源码并通过jni暴露给java层使用（过程异常复杂，需要自行修改代码，然后还要自行编译源码，中间的坑数不胜数）。不过，，，在逛github时发现了这位大佬<a target="_blank" rel="noopener" href="https://github.com/dingjikerbo/Android-RTSP">地址</a>，最后使用了他封装好的aar解决了视频帧获取的问题。既然视频帧的问题解决了，人脸检测的话就用OpenCV实现，目标检测使用TensorFlow Lite实现，具体的实现后面再说。</p>
+<br>
+
+<h4 id="视频流的播放"><a href="#视频流的播放" class="headerlink" title="视频流的播放"></a><strong>视频流的播放</strong></h4><p> 　　既然已经可以获取到帧了，那么就通过&lt;ImageView/ &gt;逐帧显示达到播放的效果，Android更新UI需要开一个runOnUiThread来实现</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">runOnUiThread( <span class="hljs-keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="hljs-meta">@Override</span></span><br><span class="line">            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">                video_view.setImageBitmap(bitmap);<span class="hljs-comment">//video_view为&lt;ImageView/ &gt;控件</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br></pre></td></tr></table></figure>
+
+<p>显示的问题也解决了，那么怎么通过libvlc获取视频帧，下面是我画的一个大致流程图：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/79.png"></p>
+<p>具体实现代码如下：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">Video_loading</span><span class="hljs-params">(String url)</span></span>&#123;</span><br><span class="line">        ArrayList&lt;String&gt; options = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        options.add(<span class="hljs-string">&quot;--aout=opensles&quot;</span>);</span><br><span class="line">        options.add(<span class="hljs-string">&quot;--audio-time-stretch&quot;</span>);</span><br><span class="line">        options.add(<span class="hljs-string">&quot;-vvv&quot;</span>);</span><br><span class="line">        mLibVLC = <span class="hljs-keyword">new</span> LibVLC(<span class="hljs-keyword">this</span>,options);</span><br><span class="line">        media = <span class="hljs-keyword">new</span> Media(mLibVLC, Uri.parse(url));</span><br><span class="line">        <span class="hljs-keyword">if</span> (mediaPlayer != <span class="hljs-keyword">null</span>)&#123;</span><br><span class="line">            mediaPlayer.release();</span><br><span class="line">        &#125;</span><br><span class="line">        mediaPlayer = <span class="hljs-keyword">new</span> MediaPlayer(media);</span><br><span class="line">        ByteBuffer frameBuffer = ByteBuffer.allocateDirect(Frame_width*Frame_height*Pixel_Size);</span><br><span class="line">        mediaPlayer.setVideoFormat(<span class="hljs-string">&quot;RGBA&quot;</span>,Frame_width,Frame_height,</span><br><span class="line">                Frame_width*Pixel_Size);</span><br><span class="line">        mediaPlayer.setVideoCallback(frameBuffer,<span class="hljs-keyword">new</span> VideoCallback());<span class="hljs-comment">//设置回调接口</span></span><br><span class="line">        mediaPlayer.setMedia(media);</span><br><span class="line">        media.release();</span><br><span class="line">        mediaPlayer.play();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment">//回调接口</span></span><br><span class="line">    <span class="hljs-keyword">private</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">VideoCallback</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">MediaPlayCallback</span></span>&#123;</span><br><span class="line">        <span class="hljs-meta">@Override</span></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onDisplay</span><span class="hljs-params">(ByteBuffer buffer)</span> </span>&#123;</span><br><span class="line">            buffer.rewind();</span><br><span class="line">            bitmap = Bitmap.createBitmap(Frame_width,Frame_height, Bitmap.Config.ARGB_8888);</span><br><span class="line">            bitmap.copyPixelsFromBuffer(buffer);</span><br><span class="line">            showFrame(bitmap);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">//放映</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">showFrame</span><span class="hljs-params">(<span class="hljs-keyword">final</span> Bitmap bitmap)</span></span>&#123;</span><br><span class="line">        runOnUiThread( <span class="hljs-keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="hljs-meta">@Override</span></span><br><span class="line">            <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;</span><br><span class="line">                video_view.setImageBitmap(bitmap);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>　　放映的问题解决了，接下来就是人脸检测以及目标检测。对于这两个的实现无非是在放映之前对帧进行处理，处理完后再放映。</p>
+<br>
+
+<h4 id="人脸检测"><a href="#人脸检测" class="headerlink" title="人脸检测"></a><strong>人脸检测</strong></h4><p>　　人脸检测的话使用OpenCV实现。使用OpenCV的分类器加载已经训练好的haar级联分类器逐帧检测达到实时检测的效果。至于Android端OpenCV的安装这里不多陈述。大致流程图：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/80.png"></p>
+<p><strong>初始化检测器</strong>: 我使用的是haarcascade_frontalface_alt.xml，对比了一下其他的发现这个检测速度好像比较快一点(xml文件在：目录/OpenCV-android-sdk\sdk\etc 的haarcascades文件夹和lbpcascades文件夹中):</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//初始化人脸检测器</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">initClassifier</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">        <span class="hljs-keyword">try</span> &#123;</span><br><span class="line">            InputStream is = getResources().openRawResource(R.raw.haarcascade_frontalface_alt);</span><br><span class="line">            File cascadeDir = getDir(<span class="hljs-string">&quot;cascade&quot;</span>, Context.MODE_PRIVATE);</span><br><span class="line">            File cascadeFile = <span class="hljs-keyword">new</span> File(cascadeDir,<span class="hljs-string">&quot;haarcascade_frontalface_alt.xml&quot;</span>);</span><br><span class="line">            FileOutputStream os = <span class="hljs-keyword">new</span> FileOutputStream(cascadeFile);</span><br><span class="line">            <span class="hljs-keyword">byte</span>[] buffer = <span class="hljs-keyword">new</span> <span class="hljs-keyword">byte</span>[<span class="hljs-number">4096</span>];</span><br><span class="line">            <span class="hljs-keyword">int</span> bytesRead;</span><br><span class="line">            <span class="hljs-keyword">while</span> ((bytesRead = is.read(buffer)) != -<span class="hljs-number">1</span>)&#123;</span><br><span class="line">                os.write(buffer,<span class="hljs-number">0</span>,bytesRead);</span><br><span class="line">            &#125;</span><br><span class="line">            is.close();</span><br><span class="line">            os.close();</span><br><span class="line">            face_detection = <span class="hljs-keyword">new</span> CascadeClassifier(cascadeFile.getAbsolutePath());</span><br><span class="line">        &#125; <span class="hljs-keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>进行人脸检测</strong>： 使用初始化好的分类器调用detectMultiScale函数进行检测，可以传两个参数：</p>
+<ol>
+<li>Mat  image:   需要检测的图像</li>
+<li>MatOfRect  objects： 用来存储检测到人脸的位置信息</li>
+</ol>
+<p>然后根据MatOfRect的信息绘制检测框：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//人脸检测</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> Bitmap <span class="hljs-title">onFaceDetection</span><span class="hljs-params">(Bitmap srcBitmap)</span></span>&#123;</span><br><span class="line">    Bitmap drawBitmap;</span><br><span class="line">    Mat src = <span class="hljs-keyword">new</span> Mat();</span><br><span class="line">    drawBitmap = Bitmap.createBitmap(srcBitmap.getWidth(),srcBitmap.getHeight(),</span><br><span class="line">            Bitmap.Config.RGB_565);</span><br><span class="line">    Utils.bitmapToMat(srcBitmap,src);</span><br><span class="line">    MatOfRect faceDetections = <span class="hljs-keyword">new</span> MatOfRect();</span><br><span class="line">    face_detection.detectMultiScale(src,faceDetections);</span><br><span class="line">    Log.d(Tag,String.format(<span class="hljs-string">&quot;Detected %s faces&quot;</span>, faceDetections.toArray().length));</span><br><span class="line">    <span class="hljs-keyword">for</span>(Rect rect : faceDetections.toArray())&#123;</span><br><span class="line">        Imgproc.rectangle(src, <span class="hljs-keyword">new</span> Point(rect.x,rect.y),</span><br><span class="line">                <span class="hljs-keyword">new</span> Point(rect.x+ rect.width,rect.y + rect.height),</span><br><span class="line">                <span class="hljs-keyword">new</span> Scalar(<span class="hljs-number">0</span>,<span class="hljs-number">0</span>,<span class="hljs-number">255</span>),</span><br><span class="line">                <span class="hljs-number">3</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    Utils.matToBitmap(src,drawBitmap);</span><br><span class="line">    <span class="hljs-keyword">return</span> drawBitmap;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在展示视频帧之前调用onFaceDetection函数进行处理后再展示，即可以达到实时人脸检测的效果。</p>
+<br>
+
+<h4 id="目标检测"><a href="#目标检测" class="headerlink" title="目标检测"></a><strong>目标检测</strong></h4><p>　　目标检测使用TensorFlow Lite实现。模型使用Google已经量化好的SSD模型<a target="_blank" rel="noopener" href="http://storage.googleapis.com/download.tensorflow.org/models/tflite/coco_ssd_mobilenet_v1_1.0_quant_2018_06_29.zip">下载</a>。文件夹下有两个文件，分别为一个.tflite文件（量化之后的SSD模型）以及标签文件。在项目中main下新建assets文件夹并将它们放入。</p>
+<p>在build.gradle(app)的android结构下添加以下代码并且添加TensorFlow Lite依赖:</p>
+<figure class="highlight xml hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">android&#123;</span><br><span class="line">	...</span><br><span class="line">	aaptOptions &#123;</span><br><span class="line">        noCompress &quot;tflite&quot;</span><br><span class="line">        noCompress &quot;lite&quot;</span><br><span class="line">    &#125;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line">dependencies &#123;</span><br><span class="line">	...</span><br><span class="line">	implementation &#x27;org.tensorflow:tensorflow-lite:0.1.7-nightly&#x27;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用TensorFlow Lite大致流程如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/81.png"></p>
+<br>
+
+<p><strong>1.创建解释器</strong></p>
+<p>　　使用模型需要通过实例化Interpreter对象创建解释器(用来推理模型)。如下：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">//实例化解释器</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> Interpreter <span class="hljs-title">loadModelFile</span><span class="hljs-params">()</span><span class="hljs-keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        AssetFileDescriptor fileDescriptor = getAssets().openFd(modelFileName);</span><br><span class="line">        FileInputStream inputStream = <span class="hljs-keyword">new</span> FileInputStream(fileDescriptor.getFileDescriptor());</span><br><span class="line">        FileChannel fileChannel = inputStream.getChannel();</span><br><span class="line">        <span class="hljs-keyword">long</span> startOffset = fileDescriptor.getStartOffset();</span><br><span class="line">        <span class="hljs-keyword">long</span> declaredLength = fileDescriptor.getDeclaredLength();</span><br><span class="line">        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> Interpreter(fileChannel.map(FileChannel.MapMode.READ_ONLY,</span><br><span class="line">                startOffset,declaredLength));</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-comment">//初始化标签信息</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> Vector&lt;String&gt; <span class="hljs-title">loadModelLabels</span><span class="hljs-params">()</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">private</span> Vector&lt;String&gt; labels = <span class="hljs-keyword">new</span> Vector&lt;String&gt;(); <span class="hljs-comment">//用来存储标签</span></span><br><span class="line">    InputStream labelsInput = <span class="hljs-keyword">null</span>;</span><br><span class="line">    labelsInput = getAssets().open(labelFileName);</span><br><span class="line">    BufferedReader br = <span class="hljs-keyword">null</span>;</span><br><span class="line">    br = <span class="hljs-keyword">new</span> BufferedReader(<span class="hljs-keyword">new</span> InputStreamReader(labelsInput));</span><br><span class="line">    String line;</span><br><span class="line">    <span class="hljs-keyword">while</span> ((line = br.readLine()) != <span class="hljs-keyword">null</span>)&#123;</span><br><span class="line">        labels.add(line);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    br.close();</span><br><span class="line">    <span class="hljs-keyword">return</span> labels;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>2.创建Input和Output</strong></p>
+<p> 　　在创建Input和Output之前，需要了解模型输入的张量形状以及类型和输出的张量形状以及类型。可以用如下代码得知(Python)：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf</span><br><span class="line">interpreter = tf.lite.Interpreter(model_path=<span class="hljs-string">&quot;detect.tflite&quot;</span>)</span><br><span class="line">interpreter.allocate_tensors()</span><br><span class="line"><span class="hljs-comment"># Print input shape and ssd_300</span></span><br><span class="line">print(interpreter.get_input_details()[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;shape&#x27;</span>])  <span class="hljs-comment"># Example: [1 300 300 3]</span></span><br><span class="line">print(interpreter.get_input_details()[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;dtype&#x27;</span>])  <span class="hljs-comment"># Example: &lt;class &#x27;numpy.uint8&#x27;&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-comment"># Print output shape and type</span></span><br><span class="line">print(interpreter.get_output_details()[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;shape&#x27;</span>])  <span class="hljs-comment"># Example: [1 10 4]</span></span><br><span class="line">print(interpreter.get_output_details()[<span class="hljs-number">0</span>][<span class="hljs-string">&#x27;dtype&#x27;</span>])  <span class="hljs-comment"># Example: &lt;class &#x27;numpy.float32&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>在得知Input和Output的形状后，就可以创建Input和Output进行推理。</p>
+<br>
+
+<p><strong>Input</strong>：即为一个视频帧（Bitmap），不过需要处理一下才能作为网络的输入：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">private</span> ByteBuffer <span class="hljs-title">createInput</span><span class="hljs-params">(<span class="hljs-keyword">final</span> Bitmap bitmap)</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> numBytesPerChannel;</span><br><span class="line">    ByteBuffer imgData;</span><br><span class="line">    <span class="hljs-keyword">int</span> inputSize = <span class="hljs-number">300</span>;</span><br><span class="line">    <span class="hljs-comment">//Float model转化为imgData会用到</span></span><br><span class="line">    <span class="hljs-keyword">float</span> IMAGE_MEAN = <span class="hljs-number">128.0f</span>;</span><br><span class="line">    <span class="hljs-keyword">float</span> IMAGE_STD = <span class="hljs-number">128.0f</span>;</span><br><span class="line">    <span class="hljs-keyword">if</span>(isQuantized)</span><br><span class="line">        numBytesPerChannel = <span class="hljs-number">1</span>;  <span class="hljs-comment">//网络的输入类型为uint8 本次使用的模型输入为uint8</span></span><br><span class="line">    <span class="hljs-keyword">else</span></span><br><span class="line">        numBytesPerChannel = <span class="hljs-number">4</span>;  <span class="hljs-comment">//网络的输入类型为float</span></span><br><span class="line">    imgData = ByteBuffer.allocateDirect(<span class="hljs-number">1</span> * inputSize * inputSize * <span class="hljs-number">3</span> *        numBytesPerChannel);</span><br><span class="line">    imgData.order(ByteOrder.nativeOrder());</span><br><span class="line">    <span class="hljs-keyword">int</span>[] intValue = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[inputSize * inputSize];</span><br><span class="line">    bitmap.getPixels(intValue,<span class="hljs-number">0</span>,bitmap.getWidth(),</span><br><span class="line">                <span class="hljs-number">0</span>,<span class="hljs-number">0</span>,</span><br><span class="line">                bitmap.getWidth(),bitmap.getHeight());</span><br><span class="line">    imgData.rewind();</span><br><span class="line">    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; inputSize; ++i) &#123;</span><br><span class="line">        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; inputSize; ++j) &#123;</span><br><span class="line">            <span class="hljs-keyword">int</span> pixelValue = intValue[i * inputSize + j];</span><br><span class="line">            <span class="hljs-keyword">if</span> (isQuantized) &#123;</span><br><span class="line">                <span class="hljs-comment">// 模型的输入为uint8</span></span><br><span class="line">                imgData.put((<span class="hljs-keyword">byte</span>) ((pixelValue &gt;&gt; <span class="hljs-number">16</span>) &amp; <span class="hljs-number">0xFF</span>));</span><br><span class="line">                imgData.put((<span class="hljs-keyword">byte</span>) ((pixelValue &gt;&gt; <span class="hljs-number">8</span>) &amp; <span class="hljs-number">0xFF</span>));</span><br><span class="line">                imgData.put((<span class="hljs-keyword">byte</span>) (pixelValue &amp; <span class="hljs-number">0xFF</span>));</span><br><span class="line">            &#125; <span class="hljs-keyword">else</span> &#123; <span class="hljs-comment">//模型的输入为Float 需要转为float</span></span><br><span class="line">                imgData.putFloat((((pixelValue &gt;&gt; <span class="hljs-number">16</span>) &amp; <span class="hljs-number">0xFF</span>) - IMAGE_MEAN) / IMAGE_STD);</span><br><span class="line">                imgData.putFloat((((pixelValue &gt;&gt; <span class="hljs-number">8</span>) &amp; <span class="hljs-number">0xFF</span>) - IMAGE_MEAN) / IMAGE_STD);</span><br><span class="line">                imgData.putFloat(((pixelValue &amp; <span class="hljs-number">0xFF</span>) - IMAGE_MEAN) / IMAGE_STD);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> imgData;</span><br><span class="line">&#125;</span><br><span class="line">Object[] Input = &#123;createInput(Bitmap inputImage)&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>Output</strong>：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;Integer, Object&gt; Output = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line"><span class="hljs-keyword">float</span>[][][] outputLocations = <span class="hljs-keyword">new</span> <span class="hljs-keyword">float</span>[<span class="hljs-number">1</span>][<span class="hljs-number">10</span>][<span class="hljs-number">4</span>];<span class="hljs-comment">// 检测到物体的位置信息</span></span><br><span class="line"><span class="hljs-keyword">float</span>[][] outputClasses = <span class="hljs-keyword">new</span> <span class="hljs-keyword">float</span>[<span class="hljs-number">1</span>][<span class="hljs-number">10</span>];  <span class="hljs-comment">//物体的类别</span></span><br><span class="line"><span class="hljs-keyword">float</span>[][] outputScores = <span class="hljs-keyword">new</span> <span class="hljs-keyword">float</span>[<span class="hljs-number">1</span>][<span class="hljs-number">10</span>];	<span class="hljs-comment">// 概率</span></span><br><span class="line"><span class="hljs-keyword">float</span>[] numDetections = <span class="hljs-keyword">new</span> <span class="hljs-keyword">float</span>[<span class="hljs-number">1</span>]; 		<span class="hljs-comment">// 检测到的数量</span></span><br><span class="line">outputMap.put(<span class="hljs-number">0</span>, outputLocations);</span><br><span class="line">outputMap.put(<span class="hljs-number">1</span>, outputClasses);</span><br><span class="line">outputMap.put(<span class="hljs-number">2</span>, outputScores);</span><br><span class="line">outputMap.put(<span class="hljs-number">3</span>, numDetections);</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>进行推理</strong>：</p>
+<p>使用实例化的Interpreter对象进行推理。</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">interpreter.runForMultipleInputsOutputs(inputArray, outputMap);</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>根据Output绘制检测框</strong></p>
+<p>　　网络输出的结果已经按照scores从大到小排列好了，首先选取scores大于0.5的检测结果，其他的丢掉。先用一张图片试一下，推理完后，先来看一下得分最高的检测信息：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/83.png"></p>
+<p>怎么根据这四个信息绘制检测框，我的理解如下；</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/84.png"></p>
+<ol>
+<li>注释①：检测框的top到原始图像最上方的距离是原始图像height的0.084537685</li>
+<li>注释②：检测框的left到原始图像最左方的距离是原始图像width的0.3836609</li>
+<li>注释③：检测框的bottom到原始图像最上方的距离是原始图像height的0.9912371</li>
+<li>注释④：检测框的right到原始图像最左方的距离是原始图像width的0.6238797</li>
+</ol>
+<p>根据以上信息绘制一个检测框：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">RectF detection = <span class="hljs-keyword">new</span> RectF(</span><br><span class="line">                    outputLocations[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">1</span>] * bitmap.getWidth(), <span class="hljs-comment">//left</span></span><br><span class="line">                    outputLocations[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">0</span>] * bitmap.getHeight(), <span class="hljs-comment">//top</span></span><br><span class="line">                    outputLocations[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">3</span>] * bitmap.getWidth(),  <span class="hljs-comment">//right</span></span><br><span class="line">                    outputLocations[<span class="hljs-number">0</span>][<span class="hljs-number">0</span>][<span class="hljs-number">2</span>] * bitmap.getHeight()  <span class="hljs-comment">//bottom</span></span><br><span class="line">            );</span><br><span class="line"><span class="hljs-keyword">final</span> Canvas canvas = <span class="hljs-keyword">new</span> Canvas(bitmap);</span><br><span class="line"><span class="hljs-keyword">final</span> Paint paint = <span class="hljs-keyword">new</span> Paint();</span><br><span class="line">paint.setColor(Color.RED);</span><br><span class="line">paint.setStyle(Paint.Style.STROKE);</span><br><span class="line">paint.setStrokeWidth(<span class="hljs-number">2.0f</span>);</span><br><span class="line">canvas.drawRect(detection,paint);</span><br></pre></td></tr></table></figure>
+
+<p>如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/85.jpg"></p>
+<p>到这里，目标检测算是完成了。</p>
+<h4 id="最后总结"><a href="#最后总结" class="headerlink" title="最后总结"></a><strong>最后总结</strong></h4><p>　　通过不断的查找资料和阅读各位大佬的代码，终于将其融合实现了这些功能。这段时间学的东西有点多，所以开篇博客汇总一下。至于播放速率大概有30-40FPS，开启人脸检测后20-25FPS，开启目标检测30-35FPS。效果还能接受。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/11/04/PCA%E4%B8%8ESVD/">
+                <span class="level-item">PCA与SVD</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="基于Android端的http、rtsp协议视频流播放器的实现" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

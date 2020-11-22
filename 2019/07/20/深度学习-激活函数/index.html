@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>深度学习-激活函数 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="激活函数的作用　　激活函数的作用主要是增加神经网络的非线性。神经网络的每一层都有矩阵相乘，如果不使用激活函数，每一层的输出都是上层输入的线性函数，无论神经网络有多少层，输出都是线性组合，并没有办法解决非线性问题。所以必须引入非线性函数作为激活函数，这样深层神经网络就有意义了，并可以解决线性模型所不能解决的问题。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习-激活函数">
+<meta property="og:url" content="https://yumiaomiao.top/2019/07/20/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0-%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="激活函数的作用　　激活函数的作用主要是增加神经网络的非线性。神经网络的每一层都有矩阵相乘，如果不使用激活函数，每一层的输出都是上层输入的线性函数，无论神经网络有多少层，输出都是线性组合，并没有办法解决非线性问题。所以必须引入非线性函数作为激活函数，这样深层神经网络就有意义了，并可以解决线性模型所不能解决的问题。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg">
+<meta property="article:published_time" content="2019-07-20T08:19:22.000Z">
+<meta property="article:modified_time" content="2019-11-06T10:06:28.592Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="深度学习-激活函数" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="深度学习-激活函数">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-07-20T08:19:22.000Z">2019-07-20</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    8 分钟 读完 (大约 1207 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                深度学习-激活函数
+            
+        </h1>
+        <div class="content">
+            <h4 id="激活函数的作用"><a href="#激活函数的作用" class="headerlink" title="激活函数的作用"></a><strong>激活函数的作用</strong></h4><p>　　激活函数的作用主要是增加神经网络的非线性。神经网络的每一层都有矩阵相乘，如果不使用激活函数，每一层的输出都是上层输入的线性函数，无论神经网络有多少层，输出都是线性组合，并没有办法解决非线性问题。所以必须引入非线性函数作为激活函数，这样深层神经网络就有意义了，并可以解决线性模型所不能解决的问题。</p>
+<a id="more"></a>
+
+<br>
+
+<h4 id="Sigmoid"><a href="#Sigmoid" class="headerlink" title="Sigmoid"></a><strong>Sigmoid</strong></h4><p>公式定义：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/40.png"></p>
+<p>导数公式：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/41.png"></p>
+<p>函数以及导数图像如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/52.png"></p>
+<p>ps：红色为函数图像，蓝色为导数图像</p>
+<p>可以看出Sigmoid的取值范围为(0,1)，它可以将一个实数映射到(0,1)的区间，可以用于输入的归一化。同时，Sigmoid函数求导比较容易，可以直接推导得出。</p>
+<p>但是，从导数图像可以看出，当x趋向于正无穷或者负无穷时，导数趋向于0。具有这种性质的称为软饱和激活函数。在反向传播的过程中，一旦输入落入饱和区，导数就会接近于0，导致向后面传递的梯度也会变得非常小。这样的话网络参数就会很难得到有效的训练。这种现象称之为梯度消失。</p>
+<br>
+
+<h4 id="Tanh"><a href="#Tanh" class="headerlink" title="Tanh"></a><strong>Tanh</strong></h4><p>公式定义：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/48.png"></p>
+<p>导数公式：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/50.png"></p>
+<p>函数以及导数图像如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/51.png"></p>
+<p>ps：红色为函数图像，蓝色为导数图像</p>
+<p>可以看出，Tanh的输出是以0为中心的，所以收敛速度要比sigmoid快，减少了迭代次数。然而从导数图像可以看出，tanh一样具有软饱和性，从而使得梯度消失。</p>
+<br>
+
+<h4 id="ReLU"><a href="#ReLU" class="headerlink" title="ReLU"></a><strong>ReLU</strong></h4><p>　　ReLU函数又称为修正线性单元，是一种分段线性函数，弥补了sigmoid函数和tanh函数的梯度消失问题。</p>
+<p>公式定义：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/55.png"></p>
+<p>导数公式：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/56.png"></p>
+<p>图像如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/53.png"></p>
+<p>　　由上图可看出，ReLU函数是一个分段性函数，把所有负值都变为0，而正值不改变，这种操作称之为单侧抑制。这样就能使得神经网络中的神经元具有了稀疏激活性，防止过度拟合。而且ReLU函数的非负区间的梯度为常数，因此不会存在梯度消失的问题，使得模型的收敛速度维持在一个稳定状态。在使用RuLU函数时，learning  rate不能设置很大，否则很有可能使得你网络中的40%的神经元坏死。所以在使用Ru LU函数时，尽量选择一个合适的较小的learning  rate。</p>
+<br>
+
+<h4 id="Leaky-ReLU"><a href="#Leaky-ReLU" class="headerlink" title="Leaky ReLU"></a><strong>Leaky ReLU</strong></h4><p>Leaky ReLU函数又称为PReLU函数，是通过ReLU改进的函数。公式定义如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/57.png"></p>
+<p>其中a的取值为(0,1)之间。</p>
+<p>导数公式：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/58.png"></p>
+<p>图像如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/54.png"></p>
+<p>Leaky ReLU函数解决了ReLU函数在输入为负的情况下产生的梯度消失问题。</p>
+<br>
+
+<h4 id="Softmax"><a href="#Softmax" class="headerlink" title="Softmax"></a><strong>Softmax</strong></h4><p>Softmax函数又称归一化指数函数，用于多分类神经网络输出。其公式定义如下：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/59.png"></p>
+<p>Sigmoid就是类别为2的Softmax。相对于Sigmoid来说，Softmax的结果之和一定唯一并且定义域为一个一维向量。如：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test = [<span class="hljs-number">8.2</span>, <span class="hljs-number">6.8</span>, <span class="hljs-number">0.7</span>, <span class="hljs-number">1.5</span>]</span><br><span class="line">out = tf.nn.softmax(s)</span><br><span class="line"><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:</span><br><span class="line">    print(sess.run(tf.nn.softmax(test)))</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/60.png"></p>
+<p>ps：8.0103743e-01为8.0103743乘以0.1，其他三个类似。</p>
+<h4 id="如何选择激活函数"><a href="#如何选择激活函数" class="headerlink" title="如何选择激活函数"></a><strong>如何选择激活函数</strong></h4><p>　　通常来说，不能把各种激活函数串起来在一个网络中使用。如果使用ReLU，那么一定要小心设置学习率，防止网络中出现过多的死亡神经元。如果神经元死亡过多这个解决不了，可以试试Leaky ReLU。尽量不要使用Sigmoid激活函数，目前主流一般都是使用ReLU激活函数。如何搭建一个多分类的神经元，在最终输出使用Softmax激活函数。</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">基于TensorFlow实现线性回归</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/06/23/%E5%9C%A8Spring%E9%87%8C%E4%BD%BF%E7%94%A8Hibernate/">
+                <span class="level-item">在Spring里使用Hibernate</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="深度学习-激活函数" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

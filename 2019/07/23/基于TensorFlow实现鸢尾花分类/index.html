@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>基于TensorFlow实现鸢尾花分类 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="问题描述本次使用TensorFlow对鸢尾花进行分类，鸢尾花分为三种：Iris Setosa(山鸢尾)、Iris Versicolour  (变色鸢尾)以及Iris Virginica(维吉尼亚鸢尾)。 我们通过4个特征值(单位：cm)来进行区分，分别为：sepal length(萼片长度)、sepal width(萼片宽度)、petal length(花瓣长度)、petal width(花瓣宽度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于TensorFlow实现鸢尾花分类">
+<meta property="og:url" content="https://yumiaomiao.top/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="问题描述本次使用TensorFlow对鸢尾花进行分类，鸢尾花分为三种：Iris Setosa(山鸢尾)、Iris Versicolour  (变色鸢尾)以及Iris Virginica(维吉尼亚鸢尾)。 我们通过4个特征值(单位：cm)来进行区分，分别为：sepal length(萼片长度)、sepal width(萼片宽度)、petal length(花瓣长度)、petal width(花瓣宽度">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg">
+<meta property="article:published_time" content="2019-07-23T08:19:22.000Z">
+<meta property="article:modified_time" content="2019-11-06T10:04:16.534Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="基于TensorFlow实现鸢尾花分类" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    10 分钟 读完 (大约 1548 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                基于TensorFlow实现鸢尾花分类
+            
+        </h1>
+        <div class="content">
+            <h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a><strong>问题描述</strong></h4><p>本次使用TensorFlow对鸢尾花进行分类，鸢尾花分为三种：Iris Setosa(山鸢尾)、Iris Versicolour  (变色鸢尾)以及Iris Virginica(维吉尼亚鸢尾)。</p>
+<p>我们通过4个特征值(单位：cm)来进行区分，分别为：sepal length(萼片长度)、sepal width(萼片宽度)、petal length(花瓣长度)、petal width(花瓣宽度)。</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/28.png"></p>
+<a id="more"></a>
+
+<br>
+
+<h4 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a><strong>获取数据</strong></h4><p>从网上下载数据：</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df = pd.read_csv(<span class="hljs-string">&#x27;https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data&#x27;</span>,</span><br><span class="line">                     header=<span class="hljs-literal">None</span>)</span><br><span class="line">print(df)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/29.png"></p>
+<p>一共有150条数据，每一条分别为4个特征加上标签。</p>
+<br>
+
+<h5 id="数据处理"><a href="#数据处理" class="headerlink" title="数据处理"></a><strong>数据处理</strong></h5><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#获取数据</span></span><br><span class="line">df = pd.read_csv(<span class="hljs-string">&#x27;https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data&#x27;</span>,</span><br><span class="line">                     header=<span class="hljs-literal">None</span>)</span><br><span class="line"><span class="hljs-comment">#提取特征</span></span><br><span class="line">features = df.iloc[<span class="hljs-number">1</span>:<span class="hljs-built_in">len</span>(df.index), [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]].values</span><br><span class="line"><span class="hljs-comment">#提取标签</span></span><br><span class="line">labels = df.iloc[<span class="hljs-number">1</span>:<span class="hljs-built_in">len</span>(df.index), <span class="hljs-number">4</span>].values</span><br><span class="line"><span class="hljs-comment"># 调节数据,标准化</span></span><br><span class="line">scaler = preprocessing.StandardScaler().fit(features)</span><br><span class="line">features_standard = scaler.transform(features)</span><br></pre></td></tr></table></figure>
+
+<p>标准化是指将数据按比例缩放，使之落入一个小的特定区间。</p>
+<p>接下来转换一下标签：</p>
+<ul>
+<li>山鸢尾-&gt;0</li>
+<li>变色鸢尾-&gt;1</li>
+<li>维吉尼亚鸢尾-&gt;2</li>
+</ul>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    <span class="hljs-comment"># 转换一下标签</span></span><br><span class="line">    labels1 = []</span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(labels)):</span><br><span class="line">        <span class="hljs-keyword">if</span> labels[i] == <span class="hljs-string">&quot;Iris-setosa&quot;</span>:</span><br><span class="line">            labels1.append(<span class="hljs-number">0</span>)</span><br><span class="line">        <span class="hljs-keyword">elif</span> labels[i] == <span class="hljs-string">&quot;Iris-versicolor&quot;</span>:</span><br><span class="line">            labels1.append(<span class="hljs-number">1</span>)</span><br><span class="line">        <span class="hljs-keyword">else</span> :</span><br><span class="line">            labels1.append(<span class="hljs-number">2</span>)</span><br><span class="line">    <span class="hljs-comment">#将数据分为训练、测试数据比例0.67 : 0.33        </span></span><br><span class="line">features_train, features_test, labels_train, labels_test =train_test_split(features_standard, labels1,test_size=<span class="hljs-number">0.33</span>)</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<h4 id="搭建网络"><a href="#搭建网络" class="headerlink" title="搭建网络"></a><strong>搭建网络</strong></h4><p>开始构建神经网络，本次网络的构建为：4个结点的输入层、2个每层10个结点的隐藏层以及3个结点的输出层。</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/31.png"></p>
+<p><strong>网络的权重以及偏差</strong></p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#权重</span></span><br><span class="line">weights = &#123;</span><br><span class="line">    <span class="hljs-string">&#x27;w1&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">4</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;w2&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;w3&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;out&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">3</span>]))</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment">#偏差</span></span><br><span class="line">biases = &#123;</span><br><span class="line">    <span class="hljs-string">&#x27;b1&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b2&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b3&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b4&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">3</span>]))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><strong>搭建网络</strong></p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-comment">#TensorFlow中的占位符，用于传入外部数据</span></span><br><span class="line">xs = tf.placeholder(tf.float32, [<span class="hljs-literal">None</span>, <span class="hljs-number">4</span>])</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">network</span>(<span class="hljs-params">x, weights, biases</span>):</span></span><br><span class="line">    <span class="hljs-comment">#第一层</span></span><br><span class="line">    z1 = tf.add(tf.matmul(x, weights[<span class="hljs-string">&#x27;w1&#x27;</span>]), biases[<span class="hljs-string">&#x27;b1&#x27;</span>])</span><br><span class="line">    a1 = tf.nn.tanh(z1)</span><br><span class="line">    <span class="hljs-comment">#第二层</span></span><br><span class="line">    z2 = tf.add(tf.matmul(a1, weights[<span class="hljs-string">&#x27;w2&#x27;</span>]), biases[<span class="hljs-string">&#x27;b2&#x27;</span>])</span><br><span class="line">    a2 = tf.nn.tanh(z2)</span><br><span class="line">    <span class="hljs-comment">#第三层</span></span><br><span class="line">    z3 = tf.add(tf.matmul(a2, weights[<span class="hljs-string">&#x27;w3&#x27;</span>]), biases[<span class="hljs-string">&#x27;b3&#x27;</span>])</span><br><span class="line">    a3 = tf.nn.tanh(z3)</span><br><span class="line">    <span class="hljs-comment">#输出层</span></span><br><span class="line">    z4 = tf.add(tf.matmul(a3, weights[<span class="hljs-string">&#x27;out&#x27;</span>]), biases[<span class="hljs-string">&#x27;b4&#x27;</span>])</span><br><span class="line">    outputs = tf.nn.softmax(z4)<span class="hljs-comment">#最后一层使用softmax激活函数</span></span><br><span class="line">    <span class="hljs-keyword">return</span> outputs</span><br></pre></td></tr></table></figure>
+
+<p>这里说下，softmax激活函数用于多分类，它能将多个神经元的输出，映射到(0,1)区间内，这样就可以看成概率来理解，从而实现多分类。表达式为：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/32.png"></p>
+<p>如下面一个神经网络的输出：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/33.png"></p>
+<br>
+
+<p>z1 = w11 * 01 + w21 * o2 + w31 * 03 + w41 * o4 + b1</p>
+<p>z2 = w12 * 01 + w22 * o2 + w32 * 03 + w42 * o4 +b2</p>
+<p>z3 = w13 * 01 + w23 * o2 + w33 * 03 + w43 * o4 + b3</p>
+<p>ps: o1 代表第一个神经元的值</p>
+<p>那么经过softmax激活可得：</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/34.png"></p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/35.png"></p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/36.png"></p>
+<br>
+
+<p><strong>损失函数以及优化器</strong></p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">out = network(xs, weights, biases)</span><br><span class="line">loss=tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels_train, logits=out))</span><br><span class="line">op = tf.train.GradientDescentOptimizer(<span class="hljs-number">0.1</span>).minimize(loss)</span><br></pre></td></tr></table></figure>
+
+<p>损失函数使用的是交叉熵，它是一个信息论中的概念，它原来是用来估算平均编码长度的。给定两个概率分布yi和yi-，通过yi-来表示yi的交叉熵为:</p>
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/37.png"></p>
+<p>交叉熵刻画的是两个概率分布之间的距离，或可以说它刻画的是通过概率分布yi-来表达概率分布yi的困难程度，yi代表正确答案，yi-代表的是预测值，交叉熵越小，两个概率的分布约接近。</p>
+<p>优化方法使用的是梯度下降。</p>
+<p><strong>开始训练</strong></p>
+<p>训练1000次，每100次输出当前损失值。</p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">init = tf.global_variables_initializer()</span><br><span class="line"><span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:</span><br><span class="line">    sess.run(init)</span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):</span><br><span class="line">        sess.run(op, feed_dict=&#123;xs: features_train&#125;)</span><br><span class="line">        <span class="hljs-keyword">if</span> i % <span class="hljs-number">100</span> == <span class="hljs-number">0</span>:</span><br><span class="line">            print(sess.run(loss, feed_dict=&#123;xs: features_train&#125;))</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/38.png"></p>
+<p>可见损失值到0.56时，梯度已经接近山底。</p>
+<p><strong>使用测试数据测试</strong></p>
+<figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">      <span class="hljs-comment">#获取预测值</span></span><br><span class="line">test = sess.run(network(xs, weights, biases), feed_dict=&#123;xs: features_test&#125;)</span><br><span class="line">      <span class="hljs-built_in">sum</span> = <span class="hljs-number">0</span></span><br><span class="line">      <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(test)):</span><br><span class="line">          <span class="hljs-keyword">if</span> test[i][<span class="hljs-number">0</span>] &gt; test[i][<span class="hljs-number">1</span>] <span class="hljs-keyword">and</span> test[i][<span class="hljs-number">0</span>] &gt; test[i][<span class="hljs-number">2</span>]:</span><br><span class="line">              <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">0</span>:</span><br><span class="line">                  <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">          <span class="hljs-keyword">elif</span> test[i][<span class="hljs-number">1</span>] &gt; test[i][<span class="hljs-number">0</span>] <span class="hljs-keyword">and</span> test[i][<span class="hljs-number">1</span>] &gt; test[i][<span class="hljs-number">2</span>]:</span><br><span class="line">              <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">1</span>:</span><br><span class="line">                  <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">          <span class="hljs-keyword">else</span>:</span><br><span class="line">              <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">2</span>:</span><br><span class="line">                  <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">      print(<span class="hljs-string">&quot;准确率为 %f&quot;</span> %(<span class="hljs-built_in">sum</span>/<span class="hljs-built_in">len</span>(test)))</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://tuchuang66.oss-cn-beijing.aliyuncs.com/img/39.png"></p>
+<p>可见准确率达到了百分之96。</p>
+<h4 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a><strong>完整代码</strong></h4><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf</span><br><span class="line"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np</span><br><span class="line"><span class="hljs-keyword">import</span> matplotlib.pyplot <span class="hljs-keyword">as</span> plt</span><br><span class="line"><span class="hljs-keyword">from</span> sklearn.model_selection <span class="hljs-keyword">import</span> train_test_split</span><br><span class="line"><span class="hljs-keyword">from</span> sklearn <span class="hljs-keyword">import</span> preprocessing</span><br><span class="line"><span class="hljs-keyword">import</span> pandas <span class="hljs-keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="hljs-comment">#权重</span></span><br><span class="line">weights = &#123;</span><br><span class="line">    <span class="hljs-string">&#x27;w1&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">4</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;w2&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;w3&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;out&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">10</span>, <span class="hljs-number">3</span>]))</span><br><span class="line">&#125;</span><br><span class="line"><span class="hljs-comment">#偏差</span></span><br><span class="line">biases = &#123;</span><br><span class="line">    <span class="hljs-string">&#x27;b1&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b2&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b3&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">10</span>])),</span><br><span class="line">    <span class="hljs-string">&#x27;b4&#x27;</span>: tf.Variable(tf.random_normal([<span class="hljs-number">1</span>, <span class="hljs-number">3</span>]))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">if</span> __name__ == <span class="hljs-string">&quot;__main__&quot;</span>:</span><br><span class="line">    df = pd.read_csv(<span class="hljs-string">&#x27;iris.data&#x27;</span>, header=<span class="hljs-literal">None</span>)</span><br><span class="line">    features = df.iloc[<span class="hljs-number">1</span>:<span class="hljs-built_in">len</span>(df.index), [<span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>]].values</span><br><span class="line">    labels = df.iloc[<span class="hljs-number">1</span>:<span class="hljs-built_in">len</span>(df.index), <span class="hljs-number">4</span>].values</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 调节数据,标准化</span></span><br><span class="line">    scaler = preprocessing.StandardScaler().fit(features)</span><br><span class="line">    features_standard = scaler.transform(features)</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 转换一下标签</span></span><br><span class="line">    labels1 = []</span><br><span class="line">    <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(labels)):</span><br><span class="line">        <span class="hljs-keyword">if</span> labels[i] == <span class="hljs-string">&quot;Iris-setosa&quot;</span>:</span><br><span class="line">            labels1.append(<span class="hljs-number">0</span>)</span><br><span class="line">        <span class="hljs-keyword">elif</span> labels[i] == <span class="hljs-string">&quot;Iris-versicolor&quot;</span>:</span><br><span class="line">            labels1.append(<span class="hljs-number">1</span>)</span><br><span class="line">        <span class="hljs-keyword">else</span> :</span><br><span class="line">            labels1.append(<span class="hljs-number">2</span>)</span><br><span class="line"></span><br><span class="line">    features_train, features_test, labels_train, labels_test = train_test_split(features_standard, labels1,</span><br><span class="line">                                                                  test_size=<span class="hljs-number">0.33</span>)</span><br><span class="line">    <span class="hljs-comment">#TensorFlow中的占位符，用于传入外部数据</span></span><br><span class="line">    xs = tf.placeholder(tf.float32, [<span class="hljs-literal">None</span>, <span class="hljs-number">4</span>])</span><br><span class="line">    ys = tf.placeholder(tf.float32, [<span class="hljs-literal">None</span>, <span class="hljs-number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">network</span>(<span class="hljs-params">x, weights, biases</span>):</span></span><br><span class="line">        <span class="hljs-comment">#第一层</span></span><br><span class="line">        z1 = tf.add(tf.matmul(x, weights[<span class="hljs-string">&#x27;w1&#x27;</span>]), biases[<span class="hljs-string">&#x27;b1&#x27;</span>])</span><br><span class="line">        a1 = tf.nn.relu(z1)</span><br><span class="line">        <span class="hljs-comment">#第二层</span></span><br><span class="line">        z2 = tf.add(tf.matmul(a1, weights[<span class="hljs-string">&#x27;w2&#x27;</span>]), biases[<span class="hljs-string">&#x27;b2&#x27;</span>])</span><br><span class="line">        a2 = tf.nn.relu(z2)</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">#输出层</span></span><br><span class="line">        z4 = tf.add(tf.matmul(a2, weights[<span class="hljs-string">&#x27;out&#x27;</span>]), biases[<span class="hljs-string">&#x27;b4&#x27;</span>])</span><br><span class="line">        outputs = tf.nn.softmax(z4)<span class="hljs-comment">#最后一层使用softmax激活函数</span></span><br><span class="line">        <span class="hljs-keyword">return</span> outputs</span><br><span class="line"></span><br><span class="line">    out = network(xs, weights, biases)</span><br><span class="line">    loss = tf.reduce_mean(tf.nn.sparse_softmax_cross_entropy_with_logits(labels=labels_train, logits=out))</span><br><span class="line">    op = tf.train.GradientDescentOptimizer(<span class="hljs-number">0.1</span>).minimize(loss)</span><br><span class="line"></span><br><span class="line">    init = tf.global_variables_initializer()</span><br><span class="line">    <span class="hljs-keyword">with</span> tf.Session() <span class="hljs-keyword">as</span> sess:</span><br><span class="line">        sess.run(init)</span><br><span class="line">        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-number">1000</span>):</span><br><span class="line">            sess.run(op, feed_dict=&#123;xs: features_train&#125;)</span><br><span class="line">            <span class="hljs-keyword">if</span> i % <span class="hljs-number">100</span> == <span class="hljs-number">0</span>:</span><br><span class="line">                print(sess.run(loss, feed_dict=&#123;xs: features_train&#125;))</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment">#获取预测值</span></span><br><span class="line">        test = sess.run(network(xs, weights, biases), feed_dict=&#123;xs: features_test&#125;)</span><br><span class="line">        <span class="hljs-built_in">sum</span> = <span class="hljs-number">0</span></span><br><span class="line">        <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> <span class="hljs-built_in">range</span>(<span class="hljs-built_in">len</span>(test)):</span><br><span class="line">            <span class="hljs-keyword">if</span> test[i][<span class="hljs-number">0</span>] &gt; test[i][<span class="hljs-number">1</span>] <span class="hljs-keyword">and</span> test[i][<span class="hljs-number">0</span>] &gt; test[i][<span class="hljs-number">2</span>]:</span><br><span class="line">                <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">0</span>:</span><br><span class="line">                    <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">            <span class="hljs-keyword">elif</span> test[i][<span class="hljs-number">1</span>] &gt; test[i][<span class="hljs-number">0</span>] <span class="hljs-keyword">and</span> test[i][<span class="hljs-number">1</span>] &gt; test[i][<span class="hljs-number">2</span>]:</span><br><span class="line">                <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">1</span>:</span><br><span class="line">                    <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">            <span class="hljs-keyword">else</span>:</span><br><span class="line">                <span class="hljs-keyword">if</span> labels_test[i] == <span class="hljs-number">2</span>:</span><br><span class="line">                    <span class="hljs-built_in">sum</span>+=<span class="hljs-number">1</span></span><br><span class="line">        print(<span class="hljs-string">&quot;准确率为 %f&quot;</span> %(<span class="hljs-built_in">sum</span>/<span class="hljs-built_in">len</span>(test)))</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">基于TensorFlow实现mnist数据分类</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/">
+                <span class="level-item">基于TensorFlow实现线性回归</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="基于TensorFlow实现鸢尾花分类" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

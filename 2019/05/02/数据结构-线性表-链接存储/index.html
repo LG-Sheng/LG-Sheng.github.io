@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>数据结构-线性表-链接存储 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="概述　　在链接存储中，每个存储结点不仅含有所存元素本身的信息，而且含有元素之间逻辑关系的信息，其存储结点的结构为date域(值域),next(指针域)，每个指针域的值为其对应的后继元素或前驱元素所在结点(以后简称为后继结点或前驱结点)的引用(存储位置)。通过结点的指针域可以访问到对应的后继结点或前驱结点，该后继结点或前驱结点称为指针域所指向的结点。若一个结点中的某个指针域不需要指向任何结点，则令它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构-线性表-链接存储">
+<meta property="og:url" content="https://yumiaomiao.top/2019/05/02/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%BF%E6%80%A7%E8%A1%A8-%E9%93%BE%E6%8E%A5%E5%AD%98%E5%82%A8/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="概述　　在链接存储中，每个存储结点不仅含有所存元素本身的信息，而且含有元素之间逻辑关系的信息，其存储结点的结构为date域(值域),next(指针域)，每个指针域的值为其对应的后继元素或前驱元素所在结点(以后简称为后继结点或前驱结点)的引用(存储位置)。通过结点的指针域可以访问到对应的后继结点或前驱结点，该后继结点或前驱结点称为指针域所指向的结点。若一个结点中的某个指针域不需要指向任何结点，则令它">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.jpg">
+<meta property="article:published_time" content="2019-05-01T16:00:00.000Z">
+<meta property="article:modified_time" content="2019-05-01T13:09:43.157Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="数据结构-线性表-链接存储" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84.jpg" alt="数据结构-线性表-链接存储">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-05-01T16:00:00.000Z">2019-05-02</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    7 分钟 读完 (大约 1019 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                数据结构-线性表-链接存储
+            
+        </h1>
+        <div class="content">
+            <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h3><p>　　在链接存储中，每个存储结点不仅含有所存元素本身的信息，而且含有元素之间逻辑关系的信息，其存储结点的结构为date域(值域),next(指针域)，每个指针域的值为其对应的后继元素或前驱元素所在结点(以后简称为后继结点或前驱结点)的引用(存储位置)。通过结点的指针域可以访问到对应的后继结点或前驱结点，该后继结点或前驱结点称为指针域所指向的结点。若一个结点中的某个指针域不需要指向任何结点，则令它的值为空(null)。</p>
+<a id="more"></a>
+
+<h3 id="结点类定义"><a href="#结点类定义" class="headerlink" title="结点类定义"></a><strong>结点类定义</strong></h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Node</span> </span>&#123;</span><br><span class="line">	Object date;  <span class="hljs-comment">//数值域</span></span><br><span class="line">	Node next;   <span class="hljs-comment">//指针域</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Node</span><span class="hljs-params">(Node nextval)</span></span>&#123;next=nextval;&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Node</span><span class="hljs-params">(Object obj,Node nextval)</span></span>&#123;</span><br><span class="line">		date=obj;</span><br><span class="line">		next=nextval;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="成员以及操作"><a href="#成员以及操作" class="headerlink" title="成员以及操作"></a><strong>成员以及操作</strong></h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">private</span> Node head;</span><br><span class="line"><span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> length; <span class="hljs-comment">//成员</span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">List</span> </span>&#123;<span class="hljs-comment">//操作</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">value</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>;<span class="hljs-comment">//返回表中第n个元素的值</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">add</span><span class="hljs-params">(Object obj,<span class="hljs-keyword">int</span> n)</span></span>;<span class="hljs-comment">//向第n个位置插入元素</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>;<span class="hljs-comment">//删除第n个元素并返回</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(Object obj,<span class="hljs-keyword">int</span> n)</span></span>;<span class="hljs-comment">//从第n个位置起查找元素</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">modify</span><span class="hljs-params">(Object obj,<span class="hljs-keyword">int</span> n)</span></span>;<span class="hljs-comment">//修改给定位置的元素值</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//判断表是否为空</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//返回表的长度</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">nextOrder</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//后继遍历表中的每个元素</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">preOrder</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//前驱遍历表中的每个元素</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span></span>;<span class="hljs-comment">//清除表中的所有元素，使之为空表</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> linkList <span class="hljs-title">sort</span><span class="hljs-params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="操作实现"><a href="#操作实现" class="headerlink" title="操作实现"></a><strong>操作实现</strong></h3><p>　　这里只演示单链表的实现(JAVA)</p>
+<h4 id="1-构造函数"><a href="#1-构造函数" class="headerlink" title="1.构造函数"></a>1.构造函数</h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">linkList</span><span class="hljs-params">()</span></span>&#123;<span class="hljs-comment">//无参的构造函数</span></span><br><span class="line">		length=<span class="hljs-number">0</span>;</span><br><span class="line">		head=<span class="hljs-keyword">new</span> Node(<span class="hljs-keyword">null</span>);</span><br><span class="line">		head.next=head;<span class="hljs-comment">//形成单链接循环空表</span></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-得到表中第n个元素的值"><a href="#2-得到表中第n个元素的值" class="headerlink" title="2.得到表中第n个元素的值"></a><strong>2.得到表中第n个元素的值</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">value</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//返回表中第n个元素的值</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> p.date;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-向表中给定位置上插入一个元素"><a href="#3-向表中给定位置上插入一个元素" class="headerlink" title="3.向表中给定位置上插入一个元素"></a><strong>3.向表中给定位置上插入一个元素</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">add</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//向第n个位置插入元素</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length+<span class="hljs-number">1</span>)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head,q=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			p=q;</span><br><span class="line">			q=q.next;</span><br><span class="line">			num++;</span><br><span class="line">		&#125;</span><br><span class="line">		p.next=<span class="hljs-keyword">new</span> Node(obj,q);</span><br><span class="line">		length++;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="4-从表中删除给定位置上的元素"><a href="#4-从表中删除给定位置上的元素" class="headerlink" title="4.从表中删除给定位置上的元素"></a><strong>4.从表中删除给定位置上的元素</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//删除第n个元素并返回</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head,q=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=q;</span><br><span class="line">			q=q.next;</span><br><span class="line">		&#125;</span><br><span class="line">		p.next=q.next;</span><br><span class="line">		length--;</span><br><span class="line">		<span class="hljs-keyword">return</span> q.date;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-从表中指定位置开始按值查找对应的第一个元素并返回所在位置"><a href="#5-从表中指定位置开始按值查找对应的第一个元素并返回所在位置" class="headerlink" title="5.从表中指定位置开始按值查找对应的第一个元素并返回所在位置"></a><strong>5.从表中指定位置开始按值查找对应的第一个元素并返回所在位置</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//从第n个位置起查找元素</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head&amp;&amp;p.date.equals(obj)==<span class="hljs-keyword">false</span>)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span>(p==head) <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;</span><br><span class="line">		<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> num;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="6-修改表中给定位置的元素值"><a href="#6-修改表中给定位置的元素值" class="headerlink" title="6.修改表中给定位置的元素值"></a><strong>6.修改表中给定位置的元素值</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">modify</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//修改给定位置的元素值</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		p.date=obj;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-判断表是否为空"><a href="#7-判断表是否为空" class="headerlink" title="7.判断表是否为空"></a><strong>7.判断表是否为空</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//判断表是否为空</span></span><br><span class="line">		<span class="hljs-keyword">return</span> length==<span class="hljs-number">0</span>;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="8-求出表长度"><a href="#8-求出表长度" class="headerlink" title="8.求出表长度"></a><strong>8.求出表长度</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//返回表的长度</span></span><br><span class="line">		<span class="hljs-keyword">return</span> length;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="9-正序遍历表中所有元素"><a href="#9-正序遍历表中所有元素" class="headerlink" title="9.正序遍历表中所有元素"></a><strong>9.正序遍历表中所有元素</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">nextOrder</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//正序遍历表中的每个元素</span></span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head)&#123;</span><br><span class="line">			System.out.print(p.date.toString()+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="10-反序遍历表中的所有元素"><a href="#10-反序遍历表中的所有元素" class="headerlink" title="10.反序遍历表中的所有元素"></a><strong>10.反序遍历表中的所有元素</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">preOrder</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//反序遍历表中的每个元素</span></span><br><span class="line">		Object ar[]=<span class="hljs-keyword">new</span> Object[length];</span><br><span class="line">		<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head)&#123;</span><br><span class="line">			ar[i++]=p.date;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">for</span>(i=length-<span class="hljs-number">1</span>;i&gt;=<span class="hljs-number">0</span>;i--)</span><br><span class="line">			System.out.print(ar[i].toString()+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="11-清除表中所有元素使之为空表"><a href="#11-清除表中所有元素使之为空表" class="headerlink" title="11.清除表中所有元素使之为空表"></a><strong>11.清除表中所有元素使之为空表</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//清除表中的所有元素，使之为空表</span></span><br><span class="line">		length=<span class="hljs-number">0</span>;</span><br><span class="line">		head.next=head;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="12-根据链表产生一个新的有序表并返回"><a href="#12-根据链表产生一个新的有序表并返回" class="headerlink" title="12.根据链表产生一个新的有序表并返回"></a><strong>12.根据链表产生一个新的有序表并返回</strong></h4><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-function"><span class="hljs-keyword">public</span> linkList <span class="hljs-title">sort</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//根据链表产生一个新的有序表并返回</span></span><br><span class="line">		linkList list;</span><br><span class="line">		list=<span class="hljs-keyword">new</span> linkList();</span><br><span class="line">		Node n=head.next;</span><br><span class="line">		Comparable x,y;</span><br><span class="line">		<span class="hljs-keyword">while</span>(n!=head)&#123;</span><br><span class="line">			x=(Comparable)n.date;</span><br><span class="line">			Node p=list.head,q=p.next;</span><br><span class="line">			<span class="hljs-keyword">while</span>(q!=list.head)&#123;</span><br><span class="line">				y=(Comparable)q.date;</span><br><span class="line">				<span class="hljs-keyword">if</span>(x.compareTo(y)&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;</span><br><span class="line">				p=q;</span><br><span class="line">				q=q.next;</span><br><span class="line">			&#125;</span><br><span class="line">			p.next=<span class="hljs-keyword">new</span> Node(n.date,q);</span><br><span class="line">			list.length++;</span><br><span class="line">			n=n.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> list;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="整体代码"><a href="#整体代码" class="headerlink" title="整体代码"></a><strong>整体代码</strong></h3><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">linkList</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">List</span></span>&#123;</span><br><span class="line">	<span class="hljs-keyword">private</span> Node head;  <span class="hljs-comment">//表头指针</span></span><br><span class="line">	<span class="hljs-keyword">private</span> <span class="hljs-keyword">int</span> length;  <span class="hljs-comment">//表当前长度</span></span><br><span class="line">	</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">linkList</span><span class="hljs-params">()</span></span>&#123;<span class="hljs-comment">//无参的构造函数</span></span><br><span class="line">		length=<span class="hljs-number">0</span>;</span><br><span class="line">		head=<span class="hljs-keyword">new</span> Node(<span class="hljs-keyword">null</span>);</span><br><span class="line">		head.next=head;<span class="hljs-comment">//形成单链接循环空表</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">value</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//返回表中第n个元素的值</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> p.date;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">add</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//向第n个位置插入元素</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length+<span class="hljs-number">1</span>)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head,q=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			p=q;</span><br><span class="line">			q=q.next;</span><br><span class="line">			num++;</span><br><span class="line">		&#125;</span><br><span class="line">		p.next=<span class="hljs-keyword">new</span> Node(obj,q);</span><br><span class="line">		length++;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">remove</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//删除第n个元素并返回</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head,q=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=q;</span><br><span class="line">			q=q.next;</span><br><span class="line">		&#125;</span><br><span class="line">		p.next=q.next;</span><br><span class="line">		length--;</span><br><span class="line">		<span class="hljs-keyword">return</span> q.date;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//从第n个位置起查找元素</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head&amp;&amp;p.date.equals(obj)==<span class="hljs-keyword">false</span>)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">if</span>(p==head) <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;</span><br><span class="line">		<span class="hljs-keyword">else</span> <span class="hljs-keyword">return</span> num;</span><br><span class="line">		</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">modify</span><span class="hljs-params">(Object obj, <span class="hljs-keyword">int</span> n)</span> </span>&#123;<span class="hljs-comment">//修改给定位置的元素值</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n&lt;<span class="hljs-number">1</span>||n&gt;length)&#123;</span><br><span class="line">			System.out.println(<span class="hljs-string">&quot;参数n的值不合法！&quot;</span>); <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">int</span> num=<span class="hljs-number">1</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(num&lt;n)&#123;</span><br><span class="line">			num++;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		p.date=obj;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//判断表是否为空</span></span><br><span class="line">		<span class="hljs-keyword">return</span> length==<span class="hljs-number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">size</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//返回表的长度</span></span><br><span class="line">		<span class="hljs-keyword">return</span> length;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">nextOrder</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//正序遍历表中的每个元素</span></span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head)&#123;</span><br><span class="line">			System.out.print(p.date.toString()+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">preOrder</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//反序遍历表中的每个元素</span></span><br><span class="line">		Object ar[]=<span class="hljs-keyword">new</span> Object[length];</span><br><span class="line">		<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;</span><br><span class="line">		Node p=head.next;</span><br><span class="line">		<span class="hljs-keyword">while</span>(p!=head)&#123;</span><br><span class="line">			ar[i++]=p.date;</span><br><span class="line">			p=p.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">for</span>(i=length-<span class="hljs-number">1</span>;i&gt;=<span class="hljs-number">0</span>;i--)</span><br><span class="line">			System.out.print(ar[i].toString()+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">clear</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//清除表中的所有元素，使之为空表</span></span><br><span class="line">		length=<span class="hljs-number">0</span>;</span><br><span class="line">		head.next=head;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> linkList <span class="hljs-title">sort</span><span class="hljs-params">()</span> </span>&#123;<span class="hljs-comment">//根据链表产生一个新的有序表并返回</span></span><br><span class="line">		linkList list;</span><br><span class="line">		list=<span class="hljs-keyword">new</span> linkList();</span><br><span class="line">		Node n=head.next;</span><br><span class="line">		Comparable x,y;</span><br><span class="line">		<span class="hljs-keyword">while</span>(n!=head)&#123;</span><br><span class="line">			x=(Comparable)n.date;</span><br><span class="line">			Node p=list.head,q=p.next;</span><br><span class="line">			<span class="hljs-keyword">while</span>(q!=list.head)&#123;</span><br><span class="line">				y=(Comparable)q.date;</span><br><span class="line">				<span class="hljs-keyword">if</span>(x.compareTo(y)&lt;<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;</span><br><span class="line">				p=q;</span><br><span class="line">				q=q.next;</span><br><span class="line">			&#125;</span><br><span class="line">			p.next=<span class="hljs-keyword">new</span> Node(n.date,q);</span><br><span class="line">			list.length++;</span><br><span class="line">			n=n.next;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> list;</span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/05/03/%E7%AE%97%E6%B3%95-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">算法-动态规划</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/05/01/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84-%E7%BA%BF%E6%80%A7%E8%A1%A8-%E9%A1%BA%E5%BA%8F%E5%AD%98%E5%82%A8/">
+                <span class="level-item">数据结构-线性表-顺序存储</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="数据结构-线性表-链接存储" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>

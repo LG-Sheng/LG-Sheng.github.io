@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html  lang="zh">
+<head>
+    <meta charset="utf-8">
+<title>算法-回溯 - 一只不愿意透露姓名的猫的博客</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+
+
+    <meta name="description" content="概述 　　回溯法有”通用解题法”之美称，是一种比枚举”聪明”的效率更高的搜索技术。回溯在搜索过程中动态地产生问题的解空间，系统地搜索问题的所有解。与枚举相比，回溯法的”聪明”之处在于能适时”回头”，若再往前走不可能得到解，就回溯，退一步另找线路，这样可省去大量的无效操作。因此，回溯与枚举相比，回溯更适合量比较大，候选解比较多的案例求解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法-回溯">
+<meta property="og:url" content="https://yumiaomiao.top/2019/04/16/%E7%AE%97%E6%B3%95-%E5%9B%9E%E6%BA%AF/index.html">
+<meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="概述 　　回溯法有”通用解题法”之美称，是一种比枚举”聪明”的效率更高的搜索技术。回溯在搜索过程中动态地产生问题的解空间，系统地搜索问题的所有解。与枚举相比，回溯法的”聪明”之处在于能适时”回头”，若再往前走不可能得到解，就回溯，退一步另找线路，这样可省去大量的无效操作。因此，回溯与枚举相比，回溯更适合量比较大，候选解比较多的案例求解。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yumiaomiao.top/images/%E7%AE%97%E6%B3%95.jpg">
+<meta property="article:published_time" content="2019-04-16T11:53:20.000Z">
+<meta property="article:modified_time" content="2019-05-01T06:11:23.131Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/%E7%AE%97%E6%B3%95.jpg">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="算法-回溯" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item"
+                href="/">Home</a>
+                
+                <a class="navbar-item"
+                href="/archives">Archives</a>
+                
+                <a class="navbar-item"
+                href="/categories">Categories</a>
+                
+                <a class="navbar-item"
+                href="/tags">Tags</a>
+                
+                <a class="navbar-item"
+                href="/about">About</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+    <div class="card-image">
+        <span  class="image is-7by1">
+            <img class="thumbnail" src="/images/%E7%AE%97%E6%B3%95.jpg" alt="算法-回溯">
+        </span>
+    </div>
+    
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-04-16T11:53:20.000Z">2019-04-16</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    10 分钟 读完 (大约 1444 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                算法-回溯
+            
+        </h1>
+        <div class="content">
+            <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a><strong>概述</strong></h3><p> 　　回溯法有”通用解题法”之美称，是一种比枚举”聪明”的效率更高的搜索技术。回溯在搜索过程中动态地产生问题的解空间，系统地搜索问题的所有解。与枚举相比，回溯法的”聪明”之处在于能适时”回头”，若再往前走不可能得到解，就回溯，退一步另找线路，这样可省去大量的无效操作。因此，回溯与枚举相比，回溯更适合量比较大，候选解比较多的案例求解。</p>
+<a id="more"></a>
+
+<p>　　回溯法是一种试探求解的方法：通过对问题的归纳分析，找出求解问题的一个线索，沿着这一线索往前试探，若试探成功，即得到解：若试探失败，就逐步往回退，换其他路线再往前试探。因此，回溯法可以形象地概括为＂向前走，碰壁回头＂，这样可大大缩减无效操作，提高搜索效率。</p>
+<h3 id="相关例题"><a href="#相关例题" class="headerlink" title="相关例题"></a><strong>相关例题</strong></h3><p>　　通过举例来学习和理解应该最有效的方法</p>
+<h4 id="1-皇后问题"><a href="#1-皇后问题" class="headerlink" title="1.皇后问题"></a><strong>1.皇后问题</strong></h4><p> 　　在n*n的的方格棋盘上放置n个皇后，使她们互不攻击，即任意两个皇后不允许处在同一横排，同一纵列，也不允许处在同一与棋盘边框成45°角的斜线上</p>
+<h5 id="1-1递归回溯法"><a href="#1-1递归回溯法" class="headerlink" title="1.1递归回溯法"></a><strong>1.1递归回溯法</strong></h5><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 皇后<span class="hljs-title">_</span>回溯<span class="hljs-title">_</span>递归回溯法 </span>&#123;  <span class="hljs-comment">//0表示此位置没有放置皇后 ，1表示已经放置</span></span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> s,sum=<span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> []ar;   <span class="hljs-comment">//用来存放答案的 数组</span></span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> [][]arr;  <span class="hljs-comment">//用二维数组表示棋盘</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		Scanner in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">		s=in.nextInt();</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[s];</span><br><span class="line">		arr=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span> [s][s];</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;s;i++)</span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;s;j++)</span><br><span class="line">				arr[i][j]=<span class="hljs-number">0</span>;</span><br><span class="line">		put(<span class="hljs-number">0</span>); <span class="hljs-comment">//从第一行 开始 放置皇后</span></span><br><span class="line">		System.out.println(sum);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>&#123;    <span class="hljs-comment">//回溯函数</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n==s)&#123;<span class="hljs-comment">//当n=s说明所有行上 都已经成功放置皇后。</span></span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;s;k++)&#123;</span><br><span class="line">				System.out.print(ar[k]+<span class="hljs-string">&quot; &quot;</span>);<span class="hljs-comment">//输出 一个解</span></span><br><span class="line">			&#125;</span><br><span class="line">			sum++;</span><br><span class="line">			System.out.println();</span><br><span class="line">			<span class="hljs-keyword">return</span> ;<span class="hljs-comment">//返回上一层</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>;i&lt;s;i++)&#123;   </span><br><span class="line">			ar[n]=i;  </span><br><span class="line">			<span class="hljs-keyword">if</span>(OkPut(n,i)) arr[n][i]=<span class="hljs-number">1</span>;<span class="hljs-comment">// 尝试在第n行第i列放置皇后，放置成功令arr[n][i]=1</span></span><br><span class="line">			<span class="hljs-keyword">else</span> <span class="hljs-keyword">continue</span>;</span><br><span class="line">			put(n+<span class="hljs-number">1</span>);<span class="hljs-comment">// 如果放置成功  进入下一行</span></span><br><span class="line">			arr[n][i]=<span class="hljs-number">0</span>;<span class="hljs-comment">// 回溯的关键， 如果在下一层找不到解，则让此位置变为0（未放置状态）</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">OkPut</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n,<span class="hljs-keyword">int</span> i)</span></span>&#123; <span class="hljs-comment">//此函数用来判断第n行第i列能否放下皇后</span></span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> t=n-<span class="hljs-number">1</span>;t&gt;=<span class="hljs-number">0</span>;t--)<span class="hljs-comment">//判断正上方 是否已经放置皇后</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(arr[t][i]==<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> w=n-<span class="hljs-number">1</span>,s=i-<span class="hljs-number">1</span>;w&gt;=<span class="hljs-number">0</span>&amp;&amp;s&gt;=<span class="hljs-number">0</span>;w--,s--)  <span class="hljs-comment">//判断左上方是否放置皇后</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(arr[w][s]==<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> z=n-<span class="hljs-number">1</span>,x=i+<span class="hljs-number">1</span>;z&gt;=<span class="hljs-number">0</span>&amp;&amp;x&lt;s;z--,x++) <span class="hljs-comment">// 判断右上方是否放置皇后</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(arr[z][x]==<span class="hljs-number">1</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="1-2迭代回溯法"><a href="#1-2迭代回溯法" class="headerlink" title="1.2迭代回溯法"></a><strong>1.2迭代回溯法</strong></h5><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> java.util.Scanner;</span><br><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 皇后问题<span class="hljs-title">_</span>回溯<span class="hljs-title">_</span>迭代回溯法 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ar[];<span class="hljs-comment">//存放解</span></span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> sum=<span class="hljs-number">0</span>,n;<span class="hljs-comment">//解的个数 和规模</span></span><br><span class="line">	<span class="hljs-keyword">static</span> Scanner in;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> b;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		in=<span class="hljs-keyword">new</span> Scanner(System.in);</span><br><span class="line">		n=in.nextInt();</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[n];</span><br><span class="line">		hui();</span><br><span class="line">		System.out.println(sum);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hui</span><span class="hljs-params">()</span></span>&#123;<span class="hljs-comment">//迭代回溯法</span></span><br><span class="line">		<span class="hljs-keyword">int</span> i=<span class="hljs-number">0</span>; ar[i]=<span class="hljs-number">0</span>;<span class="hljs-comment">//初值，相当于棋盘的(0,0)位置</span></span><br><span class="line">		<span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>)&#123;</span><br><span class="line">			b=<span class="hljs-keyword">true</span>;<span class="hljs-comment">//b=true 代表当前位置能放下皇后,false表示不能</span></span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> h=i-<span class="hljs-number">1</span>;h&gt;=<span class="hljs-number">0</span>;h--)<span class="hljs-comment">//此循环是判断能否放下皇后</span></span><br><span class="line">				<span class="hljs-keyword">if</span>(ar[i]==ar[h]||Math.abs(ar[i]-ar[h])==i-h) b=<span class="hljs-keyword">false</span>;</span><br><span class="line">            <span class="hljs-comment">//ar[i]==ar[h]判断上方是否存在皇后, Math.abs(ar[i]-ar[h])==i-h判断左上角和右上角是否存在皇后。 ps：abs(doubls n) 取绝对值</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(b&amp;&amp;i==n-<span class="hljs-number">1</span>)&#123;<span class="hljs-comment">//到达最后一层且 当前位置能放下皇后，输出一个解</span></span><br><span class="line">				sum++;</span><br><span class="line">				<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;n;k++)&#123;</span><br><span class="line">					System.out.print(ar[k]+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">				&#125;	</span><br><span class="line">				System.out.println();</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span>(i&lt;n-<span class="hljs-number">1</span>&amp;&amp;b)&#123;<span class="hljs-comment">//没到最后一层，且能放下皇后，进入下一层相当于递归回溯的put(n+1)</span></span><br><span class="line">				i++;</span><br><span class="line">				ar[i]=<span class="hljs-number">0</span>;	</span><br><span class="line">				<span class="hljs-keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">while</span>(ar[i]==n-<span class="hljs-number">1</span>&amp;&amp;i&gt;<span class="hljs-number">0</span>)&#123;<span class="hljs-comment">//当前层已达到规模还未找到解且不是第一层，进行回溯</span></span><br><span class="line">				i--;<span class="hljs-comment">//进入下一层</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span>(ar[i]==n-<span class="hljs-number">1</span>&amp;&amp;i==<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<span class="hljs-comment">//如果第一层已到达规模，说明所有解已经尝试完，结束循环</span></span><br><span class="line">			<span class="hljs-keyword">else</span> ar[i]+=<span class="hljs-number">1</span>;<span class="hljs-comment">//否则当前层数尝试下一个解</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-桥本分数式"><a href="#2-桥本分数式" class="headerlink" title="2.桥本分数式"></a><strong>2.桥本分数式</strong></h4><p>　　将1，2，3，…，9这九个数字填入下式的9个方格中（数字不能重复），使下面的分数等式成立：</p>
+<p>​                    口/口口+口/口口=口/口口</p>
+<h5 id="2-1递归回溯法"><a href="#2-1递归回溯法" class="headerlink" title="2.1递归回溯法"></a><strong>2.1递归回溯法</strong></h5><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 桥本分数式<span class="hljs-title">_</span>递归回溯法 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> [] ar;<span class="hljs-comment">//存放解的数组</span></span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span> </span>&#123;</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span> [<span class="hljs-number">9</span>];</span><br><span class="line">		put(<span class="hljs-number">0</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>&#123;<span class="hljs-comment">//回溯函数</span></span><br><span class="line">		<span class="hljs-keyword">if</span>(n==<span class="hljs-number">9</span>)&#123;<span class="hljs-comment">//当n=9说明9个数字已经全部放入方块中</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(b(ar)&amp;&amp;ar[<span class="hljs-number">0</span>]&lt;ar[<span class="hljs-number">3</span>]) pritf(ar);<span class="hljs-comment">//ar[0]&lt;ar[3]去掉重复解，比如1/26+5/78=4/39和5/78+1/26=4/39为同一个解</span></span><br><span class="line">			<span class="hljs-keyword">return</span> ;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span>;i&lt;<span class="hljs-number">10</span>;i++)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span>(is(n,i)) ar[n]=i;<span class="hljs-comment">//判断第n+1个方块能否放下数字i</span></span><br><span class="line">			<span class="hljs-keyword">else</span> <span class="hljs-keyword">continue</span>;</span><br><span class="line">			put(n+<span class="hljs-number">1</span>);<span class="hljs-comment">//进入下一层</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> ;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">is</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n,<span class="hljs-keyword">int</span> i)</span></span>&#123;</span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j=<span class="hljs-number">0</span>;j&lt;n;j++)&#123;</span><br><span class="line">			<span class="hljs-keyword">if</span>(ar[j]==i) <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-keyword">int</span> []a)</span></span>&#123;<span class="hljs-comment">//判断是否满足口/口口+口/口口=口/口口这个式子</span></span><br><span class="line">		<span class="hljs-keyword">int</span>  a1=a[<span class="hljs-number">0</span>]*(a[<span class="hljs-number">7</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">8</span>])*(a[<span class="hljs-number">4</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">5</span>]);</span><br><span class="line">		<span class="hljs-keyword">int</span>  a2=a[<span class="hljs-number">3</span>]*(a[<span class="hljs-number">1</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">2</span>])*(a[<span class="hljs-number">7</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">8</span>]);</span><br><span class="line">		<span class="hljs-keyword">int</span>  a3=a[<span class="hljs-number">6</span>]*(a[<span class="hljs-number">1</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">2</span>])*(a[<span class="hljs-number">4</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">5</span>]);</span><br><span class="line">		<span class="hljs-keyword">if</span>(a1+a2==a3) <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pritf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> []a)</span></span>&#123;<span class="hljs-comment">//打印函数</span></span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;<span class="hljs-number">9</span>;k++)&#123;</span><br><span class="line">			System.out.print(a[k]+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="2-2迭代回溯法"><a href="#2-2迭代回溯法" class="headerlink" title="2.2迭代回溯法"></a><strong>2.2迭代回溯法</strong></h5><figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> 桥本分数式<span class="hljs-title">_</span>迭代回溯法 </span>&#123;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> ar[],i,sum=<span class="hljs-number">0</span>;</span><br><span class="line">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> b;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String args[])</span></span>&#123;</span><br><span class="line">		ar=<span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span> [<span class="hljs-number">9</span>];</span><br><span class="line">		hui();</span><br><span class="line">		System.out.println(sum);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">hui</span><span class="hljs-params">()</span></span>&#123;<span class="hljs-comment">//回溯函数</span></span><br><span class="line">		i=<span class="hljs-number">0</span>;ar[i]=<span class="hljs-number">1</span>;</span><br><span class="line">		<span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>)&#123;</span><br><span class="line">			b=<span class="hljs-keyword">true</span>;</span><br><span class="line">			<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=i-<span class="hljs-number">1</span>;k&gt;=<span class="hljs-number">0</span>;k--)&#123;</span><br><span class="line">				<span class="hljs-keyword">if</span>(ar[k]==ar[i]) &#123;b=<span class="hljs-keyword">false</span>; <span class="hljs-keyword">break</span>;&#125;<span class="hljs-comment">//判断前面是否有相同的数</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span>(i==<span class="hljs-number">8</span>&amp;&amp;b&amp;&amp;ar[<span class="hljs-number">0</span>]&lt;ar[<span class="hljs-number">3</span>]&amp;&amp;b(ar))&#123;<span class="hljs-comment">//到达最后一层且数字与前面无重复且ar[0]&lt;ar[3]（除去重复解）且满足题目约束条件</span></span><br><span class="line">				pritf(ar);<span class="hljs-comment">//输出解</span></span><br><span class="line">				sum++;<span class="hljs-comment">//解+1</span></span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">if</span>(i&lt;<span class="hljs-number">8</span>&amp;&amp;b)&#123;<span class="hljs-comment">//进入下一层</span></span><br><span class="line">				i++;</span><br><span class="line">				ar[i]=<span class="hljs-number">1</span>;</span><br><span class="line">				<span class="hljs-keyword">continue</span>;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="hljs-keyword">while</span>(ar[i]==<span class="hljs-number">9</span>&amp;&amp;i&gt;<span class="hljs-number">0</span>) i--;<span class="hljs-comment">//当其中一层的值到达9，回溯</span></span><br><span class="line">			<span class="hljs-keyword">if</span>(ar[i]==<span class="hljs-number">9</span>&amp;&amp;i==<span class="hljs-number">0</span>) <span class="hljs-keyword">break</span>;<span class="hljs-comment">//第一层的值到达9，结束</span></span><br><span class="line">			<span class="hljs-keyword">else</span> ar[i]++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">b</span><span class="hljs-params">(<span class="hljs-keyword">int</span> []a)</span></span>&#123;<span class="hljs-comment">//判断函数</span></span><br><span class="line">		<span class="hljs-keyword">int</span>  a1=a[<span class="hljs-number">0</span>]*(a[<span class="hljs-number">7</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">8</span>])*(a[<span class="hljs-number">4</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">5</span>]);</span><br><span class="line">		<span class="hljs-keyword">int</span>  a2=a[<span class="hljs-number">3</span>]*(a[<span class="hljs-number">1</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">2</span>])*(a[<span class="hljs-number">7</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">8</span>]);</span><br><span class="line">		<span class="hljs-keyword">int</span>  a3=a[<span class="hljs-number">6</span>]*(a[<span class="hljs-number">1</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">2</span>])*(a[<span class="hljs-number">4</span>]*<span class="hljs-number">10</span>+a[<span class="hljs-number">5</span>]);</span><br><span class="line">		<span class="hljs-keyword">if</span>(a1+a2==a3) <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;</span><br><span class="line">		<span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pritf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> []a)</span></span>&#123;<span class="hljs-comment">//打印函数</span></span><br><span class="line">		<span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;<span class="hljs-number">9</span>;k++)&#123;</span><br><span class="line">			System.out.print(a[k]+<span class="hljs-string">&quot; &quot;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		System.out.println();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><h4 id="1-递归回溯法"><a href="#1-递归回溯法" class="headerlink" title="1.递归回溯法"></a><strong>1.递归回溯法</strong></h4><p>　　递归设计思路容易，但效率较低。基本上是由一个函数实现，当满足条件则进入下一层。当层数达到条件时，进入判断，满足则找到一个解。</p>
+<p>　　关键点在于通过不断调用函数put(int n)进入下一层</p>
+<p>基本框架为：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">int</span> ar[];<span class="hljs-comment">//用来存放解</span></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">put</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n)</span></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">if</span>(n==（规模）)&#123;<span class="hljs-comment">//每一层都找到了合适解</span></span><br><span class="line">        <span class="hljs-keyword">if</span>(（约束条件）)&#123;</span><br><span class="line">            printf(（输出一个解）);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="hljs-keyword">return</span> ;<span class="hljs-comment">//返回上一层</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> k=<span class="hljs-number">0</span>;k&lt;(规模);k++)&#123;</span><br><span class="line">        <span class="hljs-keyword">if</span>(（约束条件）)&#123;<span class="hljs-comment">//满足约束条件。则找到这一层的解</span></span><br><span class="line">            ar[n]=k;<span class="hljs-comment">//赋值</span></span><br><span class="line">        &#125;<span class="hljs-keyword">else</span> <span class="hljs-keyword">continue</span>;<span class="hljs-comment">//不满足 则尝试下一个值</span></span><br><span class="line">        put(n+<span class="hljs-number">1</span>);<span class="hljs-comment">//进入下一层</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">return</span> ;<span class="hljs-comment">//这一层没有找到合适的解，返回下一层</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="2-迭代回溯法"><a href="#2-迭代回溯法" class="headerlink" title="2.迭代回溯法"></a><strong>2.迭代回溯法</strong></h4><p>　　相对于递归回溯法来说，迭代回溯法设计思路较为复杂，但效率比递归回溯法高。ps:两个算法的设计模式没有多大的区别，彻底理解递归回溯后，迭代回溯应该没什么问题。</p>
+<p>基本框架：</p>
+<figure class="highlight java hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">int</span> i=<span class="hljs-number">1</span> ,ar[i]=（元素最初值）;</span><br><span class="line"><span class="hljs-keyword">boolean</span> b;</span><br><span class="line"><span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>)&#123;</span><br><span class="line">    b=<span class="hljs-keyword">true</span>;</span><br><span class="line">    <span class="hljs-keyword">for</span>(k=i-<span class="hljs-number">1</span>;k&gt;=<span class="hljs-number">1</span>;k--)</span><br><span class="line">        <span class="hljs-keyword">if</span>(（约束条件<span class="hljs-number">1</span>）) b=<span class="hljs-keyword">false</span>;<span class="hljs-comment">//不合适 ，将b切换为false</span></span><br><span class="line">    <span class="hljs-keyword">if</span>(b&amp;&amp;i==（规模）&amp;&amp;（约束条件<span class="hljs-number">2</span>）) pritf(一个解);</span><br><span class="line">    <span class="hljs-keyword">if</span>(b&amp;&amp;i&lt;（规模）)&#123;</span><br><span class="line">        i++;</span><br><span class="line">        ar[i]=（元素最初值）;</span><br><span class="line">        <span class="hljs-keyword">continue</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="hljs-keyword">while</span>(a[i]==（回溯点）&amp;&amp;i&gt;<span class="hljs-number">1</span>) i--;</span><br><span class="line">    <span class="hljs-keyword">if</span>(ar[i]==（规模）&amp;&amp;i==<span class="hljs-number">1</span>) <span class="hljs-keyword">break</span>;</span><br><span class="line">    <span class="hljs-keyword">else</span> a[i]+=<span class="hljs-number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-自己的想法"><a href="#3-自己的想法" class="headerlink" title="3.自己的想法"></a><strong>3.自己的想法</strong></h4><p>　　写到这里应该差不多了，如果能看懂这两个例题应该能基本掌握回溯的思想了(当然，想要真正掌握这些知识是完全不够的)。ps：其实是自己不想写了，累了！</p>
+
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
+
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
+
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/04/17/%E7%AE%97%E6%B3%95-%E9%80%92%E5%BD%92/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">算法-递归</span>
+            </a>
+        </div>
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2019/04/14/%E7%AC%AC%E4%B8%80%E7%AF%87%E5%8D%9A%E5%AE%A2/">
+                <span class="level-item">我的第一篇博客</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="爱吃猫的禾花鱼">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        爱吃猫的禾花鱼
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        LG-Sheng
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>广西</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        28
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        10
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        0
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/LG-Sheng" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank"
+                title="Github" href="https://github.com/LG-Sheng">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/LG-Sheng" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">LG-Sheng</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/Android/">
+            <span class="level-start">
+                <span class="level-item">Android</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Hibernate/">
+            <span class="level-start">
+                <span class="level-item">Hibernate</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JDBC/">
+            <span class="level-start">
+                <span class="level-item">JDBC</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">2</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/JSP/">
+            <span class="level-start">
+                <span class="level-item">JSP</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/SQL/">
+            <span class="level-start">
+                <span class="level-item">SQL</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/Spring/">
+            <span class="level-start">
+                <span class="level-item">Spring</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">7</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">
+            <span class="level-start">
+                <span class="level-item">数据结构</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">3</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">
+            <span class="level-start">
+                <span class="level-item">深度学习</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">5</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AC%94%E8%AE%B0/">
+            <span class="level-start">
+                <span class="level-item">笔记</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/%E7%AE%97%E6%B3%95/">
+            <span class="level-start">
+                <span class="level-item">算法</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">4</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/android.jpg" alt="基于Android端的http、rtsp协议视频流播放器的实现">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2020-01-11T01:19:22.000Z">2020-01-11</time></div>
+                    <a href="/2020/01/11/%E5%9F%BA%E4%BA%8EAndroid%E7%AB%AF%E7%9A%84http%E3%80%81rtsp%E5%8D%8F%E8%AE%AE%E8%A7%86%E9%A2%91%E6%B5%81%E6%92%AD%E6%94%BE%E5%99%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/" class="has-link-black-ter is-size-6">基于Android端的http、rtsp协议视频流播放器的实现</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/Android/">Android</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="PCA与SVD">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-11-04T08:19:22.000Z">2019-11-04</time></div>
+                    <a href="/2019/11/04/PCA%E4%B8%8ESVD/" class="has-link-black-ter is-size-6">PCA与SVD</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现mnist数据分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-08-15T08:19:22.000Z">2019-08-15</time></div>
+                    <a href="/2019/08/15/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0mnist%E6%95%B0%E6%8D%AE%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现mnist数据分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现鸢尾花分类">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-23T08:19:22.000Z">2019-07-23</time></div>
+                    <a href="/2019/07/23/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E9%B8%A2%E5%B0%BE%E8%8A%B1%E5%88%86%E7%B1%BB/" class="has-link-black-ter is-size-6">基于TensorFlow实现鸢尾花分类</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0.jpg" alt="基于TensorFlow实现线性回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-21T08:19:22.000Z">2019-07-21</time></div>
+                    <a href="/2019/07/21/%E5%9F%BA%E4%BA%8ETensorFlow%E5%AE%9E%E7%8E%B0%E7%BA%BF%E6%80%A7%E5%9B%9E%E5%BD%92/" class="has-link-black-ter is-size-6">基于TensorFlow实现线性回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2020/01/">
+                <span class="level-start">
+                    <span class="level-item">一月 2020</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/11/">
+                <span class="level-start">
+                    <span class="level-item">十一月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/08/">
+                <span class="level-start">
+                    <span class="level-item">八月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">1</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/06/">
+                <span class="level-start">
+                    <span class="level-item">六月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">7</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/05/">
+                <span class="level-start">
+                    <span class="level-item">五月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">11</span>
+                </span>
+            </a>
+        </li>
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/04/">
+                <span class="level-start">
+                    <span class="level-item">四月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">4</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+    <div class="container">
+        <div class="level">
+            <div class="level-start has-text-centered-mobile">
+                <a class="footer-logo is-block has-mb-6" href="/">
+                
+                    <img src="/images/logo.svg" alt="算法-回溯" height="28">
+                
+                </a>
+                <p class="is-size-7">
+                &copy; 2020 John Doe&nbsp;
+                Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
+                        href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
+                
+                </p>
+            </div>
+            <div class="level-end">
+            
+                <div class="field has-addons is-flex-center-mobile has-mt-5-mobile is-flex-wrap is-flex-middle">
+                
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Creative Commons" href="https://creativecommons.org/">
+                        
+                        <i class="fab fa-creative-commons"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Attribution 4.0 International" href="https://creativecommons.org/licenses/by/4.0/">
+                        
+                        <i class="fab fa-creative-commons-by"></i>
+                        
+                    </a>
+                </p>
+                
+                <p class="control">
+                    <a class="button is-white is-large" target="_blank" title="Download on GitHub" href="https://github.com/LG-Sheng/LG-Sheng.github.io">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                </p>
+                
+                </div>
+            
+            </div>
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" target="_blank" rel="noopener" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么..." />
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
