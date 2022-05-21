@@ -2,20 +2,25 @@
 <html  lang="zh">
 <head>
     <meta charset="utf-8">
-<title>分类: C++特性 - 一只不愿意透露姓名的猫的博客</title>
+<title>lambda表达式 - 一只不愿意透露姓名的猫的博客</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 
 
 
-    <meta property="og:type" content="website">
-<meta property="og:title" content="一只不愿意透露姓名的猫的博客">
-<meta property="og:url" content="https://yumiaomiao.top/categories/C-%E7%89%B9%E6%80%A7/index.html">
+    <meta name="description" content="lambda表达式可以构造一个闭包,能够捕获当前作用域变量的无名函数对象。 使用lambda可以就地的定义一个目标函数，不需要额外的再写一个命名函数或者函数对象。  函数对象：在类中重载函数调用符()，此时类的对象就能像普通函数一样调用，因此取名为函数对象，同时它也可以称之为仿函数。如下：  12345678910111213141516171819202122#include &lt;iostr">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lambda表达式">
+<meta property="og:url" content="https://yumiaomiao.top/2022/05/14/C++11%E7%89%B9%E6%80%A7-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/index.html">
 <meta property="og:site_name" content="一只不愿意透露姓名的猫的博客">
+<meta property="og:description" content="lambda表达式可以构造一个闭包,能够捕获当前作用域变量的无名函数对象。 使用lambda可以就地的定义一个目标函数，不需要额外的再写一个命名函数或者函数对象。  函数对象：在类中重载函数调用符()，此时类的对象就能像普通函数一样调用，因此取名为函数对象，同时它也可以称之为仿函数。如下：  12345678910111213141516171819202122#include &lt;iostr">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://yumiaomiao.top/images/og_image.png">
+<meta property="og:image" content="https://yumiaomiao.top/images/c++.jpg">
+<meta property="article:published_time" content="2022-05-14T10:00:22.000Z">
+<meta property="article:modified_time" content="2022-05-21T06:47:55.361Z">
 <meta property="article:author" content="John Doe">
+<meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://yumiaomiao.top/images/og_image.png">
+<meta name="twitter:image" content="https://yumiaomiao.top/images/c++.jpg">
 
 
 
@@ -89,7 +94,7 @@
         <div class="navbar-brand is-flex-center">
             <a class="navbar-item navbar-logo" href="/">
             
-                <img src="/images/logo.svg" alt="一只不愿意透露姓名的猫的博客" height="28">
+                <img src="/images/logo.svg" alt="lambda表达式" height="28">
             
             </a>
         </div>
@@ -140,23 +145,11 @@
         <div class="container">
             <div class="columns">
                 <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
-    <div class="card-content">
-        <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="/categories">分类</a></li>
-            
-            <li class="is-active"><a href="#" aria-current="page">C++特性</a></li>
-        </ul>
-        </nav>
-    </div>
-</div>
-
-    <div class="card">
     
     <div class="card-image">
-        <a href="/2022/05/14/C++11%E7%89%B9%E6%80%A7-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="image is-7by1">
+        <span  class="image is-7by1">
             <img class="thumbnail" src="/images/c++.jpg" alt="lambda表达式">
-        </a>
+        </span>
     </div>
     
     <div class="card-content article ">
@@ -182,7 +175,7 @@
         
         <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
             
-                <a class="has-link-black-ter" href="/2022/05/14/C++11%E7%89%B9%E6%80%A7-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/">lambda表达式</a>
+                lambda表达式
             
         </h1>
         <div class="content">
@@ -192,199 +185,83 @@
 <li>函数对象：在类中重载函数调用符()，此时类的对象就能像普通函数一样调用，因此取名为函数对象，同时它也可以称之为仿函数。如下：</li>
 </ul>
 <figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">A</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">    A(<span class="hljs-keyword">int</span> _a, <span class="hljs-keyword">int</span> _b):a(_a),b(_b)&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span> <span class="hljs-params">()</span></span>&#123; <span class="hljs-comment">//重载() 运算符</span></span><br><span class="line">        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;a = &quot;</span>&lt;&lt;a&lt;&lt;<span class="hljs-string">&quot; b = &quot;</span>&lt;&lt;b&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">        <span class="hljs-keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">    <span class="hljs-keyword">int</span> a;</span><br><span class="line">    <span class="hljs-keyword">int</span> b;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-function">A <span class="hljs-title">a</span><span class="hljs-params">(<span class="hljs-number">4</span>, <span class="hljs-number">6</span>)</span></span>;</span><br><span class="line">    <span class="hljs-built_in">cout</span>&lt;&lt;a()&lt;&lt;<span class="hljs-built_in">endl</span>; <span class="hljs-comment">//对象可以像普通函数一样使用</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2022/05/14/C++11%E7%89%B9%E6%80%A7-lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
-    </div>
-</div>
 
+ <a id="more"></a>
 
+<h4 id="lambda实现原理"><a href="#lambda实现原理" class="headerlink" title="lambda实现原理"></a>lambda实现原理</h4><p>lambda在编译时会自动的生成一个匿名类，捕获列表捕获的元素在匿名类创建时会拷贝进匿名类的private中，并且在该类重载了()运算符，大致如下：</p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">int</span> a = <span class="hljs-number">2</span>;</span><br><span class="line"><span class="hljs-keyword">int</span> b = <span class="hljs-number">3</span>;</span><br><span class="line"><span class="hljs-keyword">auto</span> fun = [=]() -&gt; <span class="hljs-keyword">int</span> &#123;</span><br><span class="line">    <span class="hljs-keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<p>对应的类为：</p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Fun</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">    Fun(<span class="hljs-keyword">int</span> _a, <span class="hljs-keyword">int</span> _b):a(_a),b(_b)&#123;&#125;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">operator</span><span class="hljs-params">()</span> <span class="hljs-params">()</span><span class="hljs-keyword">const</span></span>&#123; <span class="hljs-comment">//如果上面使用了关键词 mutable，则函数不为const</span></span><br><span class="line">        <span class="hljs-keyword">return</span> a + b;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">    <span class="hljs-keyword">int</span> a;</span><br><span class="line">    <span class="hljs-keyword">int</span> b;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
+<p>其中函数名由编译器决定，私有成员变量由捕获列表决定，重载()操作符函数里的内容由 lambda 表达式中的函数体决定，返回值由尾随返回类型决定或者自动进行推算。</p>
+<h4 id="lambda表达式声明"><a href="#lambda表达式声明" class="headerlink" title="lambda表达式声明"></a>lambda表达式声明</h4><p>完整声明</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[捕获] (参数列表) 说明符 约束(可选) -&gt; 返回类型 &#123; 函数体 &#125;</span><br></pre></td></tr></table></figure>
 
-
-
-
-    <div class="card">
-    
-    <div class="card-image">
-        <a href="/2022/05/08/C++11%E7%89%B9%E6%80%A7-final%E4%B8%8Eoverride/" class="image is-7by1">
-            <img class="thumbnail" src="/images/c++.jpg" alt="final 与 override关键字">
-        </a>
-    </div>
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2022-05-08T10:30:22.000Z">2022-05-08</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/C-%E7%89%B9%E6%80%A7/">C++特性</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    2 分钟 读完 (大约 250 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2022/05/08/C++11%E7%89%B9%E6%80%A7-final%E4%B8%8Eoverride/">final 与 override关键字</a>
-            
-        </h1>
-        <div class="content">
-            <h4 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a><strong>final关键字</strong></h4><p>指定某个虚函数不能在派生类中被覆盖，或者指定某个类不能被派，主要作用在于防止虚函数无意的重写。</p>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2022/05/08/C++11%E7%89%B9%E6%80%A7-final%E4%B8%8Eoverride/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-image">
-        <a href="/2022/04/27/C++11%E7%89%B9%E6%80%A7-%E9%A2%84%E7%BD%AE%E4%B8%8E%E5%BC%83%E7%BD%AE%E5%87%BD%E6%95%B0/" class="image is-7by1">
-            <img class="thumbnail" src="/images/c++.jpg" alt="预置与弃置函数">
-        </a>
-    </div>
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2022-04-27T11:45:22.000Z">2022-04-27</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/C-%E7%89%B9%E6%80%A7/">C++特性</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    1 分钟 读完 (大约 143 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2022/04/27/C++11%E7%89%B9%E6%80%A7-%E9%A2%84%E7%BD%AE%E4%B8%8E%E5%BC%83%E7%BD%AE%E5%87%BD%E6%95%B0/">预置与弃置函数</a>
-            
-        </h1>
-        <div class="content">
-            <p>在定义函数时尾部带**=delete<strong>表示该函数为弃置函数，任何使用弃置函数的地方都为非良构的，即编译器无法编译通过，带</strong>=default**表示该函数为预置函数。</p>
-        </div>
-        
-        
-        <div class="level is-mobile">
-            <div class="level-start">
-                <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2022/04/27/C++11%E7%89%B9%E6%80%A7-%E9%A2%84%E7%BD%AE%E4%B8%8E%E5%BC%83%E7%BD%AE%E5%87%BD%E6%95%B0/#more">阅读更多</a>
-                </div>
-            </div>
-        </div>
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-    <div class="card-image">
-        <a href="/2022/04/23/C++11%E7%89%B9%E6%80%A7-auto&decltype%E5%85%B3%E9%94%AE%E5%AD%97/" class="image is-7by1">
-            <img class="thumbnail" src="/images/c++.jpg" alt="auto关键字&amp;decltype关键字">
-        </a>
-    </div>
-    
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2022-04-23T07:45:22.000Z">2022-04-23</time>
-                
-                <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/C-%E7%89%B9%E6%80%A7/">C++特性</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    4 分钟 读完 (大约 629 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2022/04/23/C++11%E7%89%B9%E6%80%A7-auto&decltype%E5%85%B3%E9%94%AE%E5%AD%97/">auto关键字&amp;decltype关键字</a>
-            
-        </h1>
-        <div class="content">
-            <p>auto&amp;decltype关键字用于进行类型推导，使其在编译期就能推导出变量或者表达式的类型。</p>
+<p>省略了返回值类型，编译器可通过以下规则推断出表达式的返回类型：</p>
 <ul>
-<li><strong>auto</strong>： 让编译器在编译期间推导出变量类型，通过 = 右边的类型推导出 = 左边的变量类型。<ul>
-<li>对于变量，指定要从它的初始化器自动推导出它的类型。</li>
-<li>对于函数，指定要从它的 return 语句推导出它的返回类型。(ps: C++14起)</li>
-<li>对于非类型模板形参，指定要从实参推导出它的类型。(ps: C++17起)</li>
+<li>函数体中的return语句</li>
+<li>如果函数体没有return语句，则返回值为void</li>
 </ul>
-</li>
-<li><strong>decltype</strong>： 相比于auto，decltype用于推导表达式类型。检查实体的声明类型，或表达式的类型和值类别。</li>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[捕获] (参数列表) &#123; 函数体 &#125;</span><br></pre></td></tr></table></figure>
+
+<p>省略形参列表：函数不接收实参，如同形参列表是 ()</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[捕获] &#123; 函数体 &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="lambda捕获类型"><a href="#lambda捕获类型" class="headerlink" title="lambda捕获类型"></a>lambda捕获类型</h4><ul>
+<li>[]  不捕获任何变量</li>
+<li>[=]  以复制的方式捕获所有变量</li>
+<li>[&amp;]  以引用方式捕获所有变量</li>
+<li>[var]  以复制的方式捕获标识符为var的变量</li>
+<li>[&amp;var]  以引用的方式捕获标识符为var的变量</li>
+<li>[var…]  以包展开的方式复制参数包变量</li>
+<li>[&amp;var…]  以包展开的方式引用参数包变量</li>
+<li>[=,&amp;var]  标识符为var的变量以引用的方式捕获，剩余其他变量以复制的方式捕获</li>
+<li>[&amp;,var]  标识符为var的变量以复制的方式捕获，剩余其他变量以引用的方式捕获</li>
+<li>[this]  以引用的方式捕获当前对象</li>
+<li>[*this]  以复制的方式捕获当前对象</li>
 </ul>
+<h4 id="lambda使用"><a href="#lambda使用" class="headerlink" title="lambda使用"></a>lambda使用</h4><p><strong>常用捕获</strong></p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">int</span> a = <span class="hljs-number">3</span>,b = <span class="hljs-number">4</span>;</span><br><span class="line">    <span class="hljs-built_in">string</span> c = <span class="hljs-string">&quot;lambda&quot;</span>;</span><br><span class="line">    <span class="hljs-keyword">float</span> d = <span class="hljs-number">5.754</span>;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">auto</span> fun = [=]&#123; <span class="hljs-comment">//以复制的方式捕获当前作用域的所有变量</span></span><br><span class="line">        <span class="hljs-comment">//a = 44; //没加 mutable 会报错</span></span><br><span class="line">        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;1: a = %d b = %d c = %s d = %.3f\n&quot;</span>,a,b,c.c_str(),d);</span><br><span class="line">    &#125;;</span><br><span class="line">    fun();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">auto</span> fun1 = [&amp;]&#123; <span class="hljs-comment">//以复制的方式捕获当前作用域的所有变量</span></span><br><span class="line">        a = <span class="hljs-number">30</span>;</span><br><span class="line">        b = <span class="hljs-number">40</span>;</span><br><span class="line">        c = <span class="hljs-string">&quot;lambda test&quot;</span>;</span><br><span class="line">        d = <span class="hljs-number">1.23455</span>;</span><br><span class="line">        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;2: a = %d b = %d c = %s d = %.5f\n&quot;</span>,a,b,c.c_str(),d);</span><br><span class="line">    &#125;;</span><br><span class="line">    fun1();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">auto</span> fun2 = [a, b, &amp;c, &amp;d] () <span class="hljs-keyword">mutable</span> &#123; <span class="hljs-comment">//a,b以复制的方式捕获c,d以引用的方式捕获</span></span><br><span class="line">        a = <span class="hljs-number">300</span>;<span class="hljs-comment">//加了 mutable 说明符 可以修改复制方式捕获的值，但不会影响到原有的值</span></span><br><span class="line">        b = <span class="hljs-number">400</span>;</span><br><span class="line">        c = <span class="hljs-string">&quot;lambda test test&quot;</span>;</span><br><span class="line">        d = <span class="hljs-number">11.23455</span>;</span><br><span class="line">        <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;3: a = %d b = %d c = %s d = %.5f\n&quot;</span>,a,b,c.c_str(),d);</span><br><span class="line">    &#125;;</span><br><span class="line">    fun2();</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;4: a = %d b = %d c = %s d = %.5f\n&quot;</span>,a,b,c.c_str(),d);<span class="hljs-comment">//a,b的值没有改变</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-number">1</span>: a = <span class="hljs-number">3</span> b = <span class="hljs-number">4</span> c = lambda d = <span class="hljs-number">5.754</span></span><br><span class="line"><span class="hljs-number">2</span>: a = <span class="hljs-number">30</span> b = <span class="hljs-number">40</span> c = lambda test d = <span class="hljs-number">1.23455</span></span><br><span class="line"><span class="hljs-number">3</span>: a = <span class="hljs-number">300</span> b = <span class="hljs-number">400</span> c = lambda test test d = <span class="hljs-number">11.23455</span></span><br><span class="line"><span class="hljs-number">4</span>: a = <span class="hljs-number">30</span> b = <span class="hljs-number">40</span> c = lambda test test d = <span class="hljs-number">11.23455</span></span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>捕获参数包</strong></p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">tprintf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i)</span> <span class="hljs-comment">//这个函数必须定义  tprintf函数的参数包解析完后,就会调用void tprintf(int i)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;i = &quot;</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">&quot; end&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">    <span class="hljs-keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-keyword">template</span>&lt;<span class="hljs-keyword">typename</span> U, <span class="hljs-keyword">typename</span> ...Ts&gt;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">tprintf</span><span class="hljs-params">(<span class="hljs-keyword">int</span> i, U u, Ts... ts)</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">auto</span> t = [i, ts...]()&#123; <span class="hljs-comment">//lambda 捕获参数包</span></span><br><span class="line">        tprintf(i + <span class="hljs-number">1</span>, ts...);</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="hljs-built_in">std</span>::<span class="hljs-built_in">cout</span> &lt;&lt;<span class="hljs-string">&quot;i = &quot;</span>&lt;&lt;i&lt;&lt;<span class="hljs-string">&quot; value is &quot;</span> &lt;&lt; u &lt;&lt; <span class="hljs-built_in">std</span>::<span class="hljs-built_in">endl</span>;</span><br><span class="line">    t();</span><br><span class="line">    <span class="hljs-keyword">return</span> ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    tprintf(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-string">&#x27;c&#x27;</span>, <span class="hljs-number">3</span>, <span class="hljs-number">8</span>, <span class="hljs-string">&quot;sda&quot;</span>, <span class="hljs-string">&quot;jjhj&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">int</span> a = <span class="hljs-number">3</span>;</span><br><span class="line">    <span class="hljs-keyword">int</span> b = <span class="hljs-number">4</span>;</span><br><span class="line">    <span class="hljs-keyword">int</span> c = <span class="hljs-number">5</span>;</span><br><span class="line">    <span class="hljs-keyword">auto</span> f = []()&#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;lambda&quot;</span>&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">i = <span class="hljs-number">1</span> value is <span class="hljs-number">1</span></span><br><span class="line">i = <span class="hljs-number">2</span> value is c</span><br><span class="line">i = <span class="hljs-number">3</span> value is <span class="hljs-number">3</span></span><br><span class="line">i = <span class="hljs-number">4</span> value is <span class="hljs-number">8</span></span><br><span class="line">i = <span class="hljs-number">5</span> value is sda</span><br><span class="line">i = <span class="hljs-number">6</span> value is jjhj</span><br><span class="line">i = <span class="hljs-number">7</span> end</span><br></pre></td></tr></table></figure>
+
+
+
+<p><strong>捕获对象</strong></p>
+<figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Lam</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">    Lam(<span class="hljs-keyword">int</span> _miA, <span class="hljs-keyword">int</span> _miB):miA(_miA),miB(_miB)&#123;&#125;</span><br><span class="line">    ~Lam()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lamTest</span><span class="hljs-params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">printfAB</span><span class="hljs-params">(<span class="hljs-keyword">int</span> index)</span> <span class="hljs-keyword">const</span> </span>&#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span>&lt;&lt;index&lt;&lt;<span class="hljs-string">&quot;: miA = &quot;</span>&lt;&lt;miA&lt;&lt;<span class="hljs-string">&quot; miB = &quot;</span>&lt;&lt;miB&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">setAB</span><span class="hljs-params">(<span class="hljs-keyword">int</span> miA, <span class="hljs-keyword">int</span> miB)</span></span>&#123;</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;miA = miA;</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;miB = miB;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">    <span class="hljs-keyword">int</span> miA;</span><br><span class="line">    <span class="hljs-keyword">int</span> miB;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Lam::lamTest</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-keyword">auto</span> f = [*<span class="hljs-keyword">this</span>] &#123;</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;printfAB(<span class="hljs-number">1</span>); <span class="hljs-comment">//以复制的方式捕获对象时，如果没加 mutable标识符 只能调用 存在const标识符的 函数</span></span><br><span class="line">        <span class="hljs-comment">//setAB(5, 6); //编译不过</span></span><br><span class="line">    &#125;;</span><br><span class="line">    f();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">auto</span> f1 = [*<span class="hljs-keyword">this</span>]() <span class="hljs-keyword">mutable</span>&#123; <span class="hljs-comment">//加了mutable标识符 编译器生成的 访函数就不为const</span></span><br><span class="line">        miA = <span class="hljs-number">3</span>;</span><br><span class="line">        miB = <span class="hljs-number">4</span>;</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;printfAB(<span class="hljs-number">2</span>);</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;setAB(<span class="hljs-number">5</span>, <span class="hljs-number">6</span>); <span class="hljs-comment">//加了mutable标识符 可以调用非const函数</span></span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;printfAB(<span class="hljs-number">3</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    f1();</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">this</span>-&gt;printfAB(<span class="hljs-number">4</span>);<span class="hljs-comment">//以复制的方式捕获对象 不会对原有对象产生影响</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">auto</span> f2 = [<span class="hljs-keyword">this</span>]&#123;<span class="hljs-comment">//以引用的方式捕获对象</span></span><br><span class="line">        miA = <span class="hljs-number">7</span>;</span><br><span class="line">        miB = <span class="hljs-number">8</span>;</span><br><span class="line">        <span class="hljs-keyword">this</span>-&gt;printfAB(<span class="hljs-number">5</span>);</span><br><span class="line">    &#125;;</span><br><span class="line">    f2();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-function">Lam <span class="hljs-title">lam</span><span class="hljs-params">(<span class="hljs-number">1</span>,<span class="hljs-number">2</span>)</span></span>;</span><br><span class="line">    lam.lamTest();</span><br><span class="line">    lam.printfAB(<span class="hljs-number">6</span>);<span class="hljs-comment">//f2以引用的方式捕获对象 对原有对象产生了影响</span></span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">1: miA &#x3D; 1 miB &#x3D; 2</span><br><span class="line">2: miA &#x3D; 3 miB &#x3D; 4</span><br><span class="line">3: miA &#x3D; 5 miB &#x3D; 6</span><br><span class="line">4: miA &#x3D; 1 miB &#x3D; 2</span><br><span class="line">5: miA &#x3D; 7 miB &#x3D; 8</span><br><span class="line">6: miA &#x3D; 7 miB &#x3D; 8</span><br></pre></td></tr></table></figure>
+
+
+
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><figure class="highlight c++ hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;map&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lambdaSwitch</span><span class="hljs-params">()</span>  <span class="hljs-comment">//使用lambda代替switch</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    <span class="hljs-built_in">map</span>&lt;<span class="hljs-keyword">int</span>,<span class="hljs-built_in">std</span>::function&lt;<span class="hljs-built_in">string</span>()&gt;&gt; lam;</span><br><span class="line">    lam[<span class="hljs-number">1</span>] = []&#123;<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;lambda1&quot;</span>;&#125;;</span><br><span class="line">    lam[<span class="hljs-number">2</span>] = []&#123;<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;lambda2&quot;</span>;&#125;;</span><br><span class="line">    lam[<span class="hljs-number">3</span>] = []&#123;<span class="hljs-keyword">return</span> <span class="hljs-string">&quot;lambda3&quot;</span>;&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;1: %s\n&quot;</span>,lam[<span class="hljs-number">1</span>]().c_str());</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;2: %s\n&quot;</span>,lam[<span class="hljs-number">2</span>]().c_str());</span><br><span class="line">    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;3: %s\n&quot;</span>,lam[<span class="hljs-number">3</span>]().c_str());</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SortTest</span>;</span></span><br><span class="line"><span class="hljs-keyword">typedef</span> <span class="hljs-built_in">vector</span>&lt;SortTest&gt; SortTestSet;</span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SortTest</span>&#123;</span></span><br><span class="line"><span class="hljs-keyword">public</span>:</span><br><span class="line">    SortTest(<span class="hljs-keyword">int</span> _miId, <span class="hljs-built_in">string</span> _msName):miId(_miId),msName(_msName)&#123;&#125;</span><br><span class="line">    ~SortTest()&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getId</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>&#123;<span class="hljs-keyword">return</span> miId;&#125;;</span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">inline</span> <span class="hljs-built_in">string</span> <span class="hljs-title">getName</span><span class="hljs-params">()</span> <span class="hljs-keyword">const</span></span>&#123;<span class="hljs-keyword">return</span> msName;&#125;;</span><br><span class="line"><span class="hljs-keyword">private</span>:</span><br><span class="line">    <span class="hljs-keyword">int</span> miId;</span><br><span class="line">    <span class="hljs-built_in">string</span> msName;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">lambdaSort</span><span class="hljs-params">()</span>  <span class="hljs-comment">//lambda表达式 用于排序</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    SortTestSet <span class="hljs-built_in">set</span>;</span><br><span class="line">    <span class="hljs-built_in">set</span>.push_back(SortTest(<span class="hljs-number">5</span>, <span class="hljs-string">&quot;sort&quot;</span>));</span><br><span class="line">    <span class="hljs-built_in">set</span>.push_back(SortTest(<span class="hljs-number">15</span>, <span class="hljs-string">&quot;sortsortsort&quot;</span>));</span><br><span class="line">    <span class="hljs-built_in">set</span>.push_back(SortTest(<span class="hljs-number">7</span>, <span class="hljs-string">&quot;sortsortsortsortsort&quot;</span>));</span><br><span class="line">    <span class="hljs-built_in">set</span>.push_back(SortTest(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;sortsortsortsort&quot;</span>));</span><br><span class="line">    <span class="hljs-built_in">set</span>.push_back(SortTest(<span class="hljs-number">4</span>, <span class="hljs-string">&quot;sortsort&quot;</span>));</span><br><span class="line"></span><br><span class="line">    sort(<span class="hljs-built_in">set</span>.begin(), <span class="hljs-built_in">set</span>.end(), [](SortTest a, SortTest b)&#123;</span><br><span class="line">        <span class="hljs-comment">//return a.getId() &lt; b.getId();//按照 miId的大小排序</span></span><br><span class="line">        <span class="hljs-keyword">return</span> a.getName() &lt; b.getName();<span class="hljs-comment">//按照 msName的长度排序</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">auto</span> s:<span class="hljs-built_in">set</span>)&#123;</span><br><span class="line">        <span class="hljs-built_in">cout</span>&lt;&lt;<span class="hljs-string">&quot;sort: id = &quot;</span>&lt;&lt;s.getId()&lt;&lt;<span class="hljs-string">&quot; name = &quot;</span>&lt;&lt;s.getName()&lt;&lt;<span class="hljs-built_in">endl</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span></span><br><span class="line"><span class="hljs-function"></span>&#123;</span><br><span class="line">    lambdaSwitch();</span><br><span class="line">    lambdaSort();</span><br><span class="line">    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>输出</strong></p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1: lambda1</span><br><span class="line">2: lambda2</span><br><span class="line">3: lambda3</span><br><span class="line">sort: id &#x3D; 5 name &#x3D; sort</span><br><span class="line">sort: id &#x3D; 4 name &#x3D; sortsort</span><br><span class="line">sort: id &#x3D; 15 name &#x3D; sortsortsort</span><br><span class="line">sort: id &#x3D; 2 name &#x3D; sortsortsortsort</span><br><span class="line">sort: id &#x3D; 7 name &#x3D; sortsortsortsortsort</span><br></pre></td></tr></table></figure>
+
+
         </div>
         
-        
-        <div class="level is-mobile">
+        <div class="level is-size-7 is-uppercase">
             <div class="level-start">
                 <div class="level-item">
-                <a class="button is-size-7 is-light" href="/2022/04/23/C++11%E7%89%B9%E6%80%A7-auto&decltype%E5%85%B3%E9%94%AE%E5%AD%97/#more">阅读更多</a>
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link-link" href="/tags/C/" rel="tag">C++</a>
                 </div>
             </div>
         </div>
+        
         
         
     </div>
@@ -392,12 +269,91 @@
 
 
 
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<a class="button is-info donate">
+    <span class="icon is-small">
+        <i class="fab fa-alipay"></i>
+    </span>
+    <span>支付宝</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="支付宝"></div>
+</a>
 
+                
+                
+<a class="button is-success donate">
+    <span class="icon is-small">
+        <i class="fab fa-weixin"></i>
+    </span>
+    <span>微信</span>
+    <div class="qrcode"><img src="https://github.com/LG-Sheng" alt="微信"></div>
+</a>
 
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
 
+<a class="button is-warning donate" onclick="document.getElementById(&#39;paypal-donate-form&#39;).submit()">
+    <span class="icon is-small">
+        <i class="fab fa-paypal"></i>
+    </span>
+    <span>Paypal</span>
+</a>
+<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank" id="paypal-donate-form">
+    <input type="hidden" name="cmd" value="_donations" />
+    <input type="hidden" name="business" value="https://github.com/LG-Sheng" />
+    <input type="hidden" name="currency_code" value="USD" />
+</form>
 
+                
+                
+<a class="button is-danger donate" href="https://github.com/LG-Sheng" target="_blank">
+    <span class="icon is-small">
+        <i class="fab fa-patreon"></i>
+    </span>
+    <span>Patreon</span>
+</a>
 
+                
+        </div>
+    </div>
 </div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        
+        <div class="level-end">
+            <a class="level level-item has-link-grey  article-nav-next" href="/2022/05/08/C++11%E7%89%B9%E6%80%A7-final%E4%B8%8Eoverride/">
+                <span class="level-item">final 与 override关键字</span>
+                <i class="level-item fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+    </div>
+</div>
+
+
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script></div>
                 
 
 
@@ -1199,11 +1155,11 @@
             <div class="level-start has-text-centered-mobile">
                 <a class="footer-logo is-block has-mb-6" href="/">
                 
-                    <img src="/images/logo.svg" alt="一只不愿意透露姓名的猫的博客" height="28">
+                    <img src="/images/logo.svg" alt="lambda表达式" height="28">
                 
                 </a>
                 <p class="is-size-7">
-                &copy; 2022 John Doe&nbsp;
+                &copy; 2022 小东东&nbsp;
                 Powered by <a href="http://hexo.io/" target="_blank">Hexo</a> & <a
                         href="http://github.com/ppoffice/hexo-theme-icarus" target="_blank">Icarus</a>
                 
